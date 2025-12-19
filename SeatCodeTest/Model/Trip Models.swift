@@ -9,8 +9,8 @@ import Foundation
 import CoreLocation
 
 struct Trip: Codable, Identifiable {
-    let id = UUID()
-    let tripId: Int? // Numeric ID from JSON that matches StopDetail.tripId
+    let uuid = UUID()
+    let id: Int?
     let description: String
     let driverName: String
     let route: String // Google encoded polyline
@@ -21,10 +21,6 @@ struct Trip: Codable, Identifiable {
     let endTime: String
     let startTime: String
     
-    enum CodingKeys: String, CodingKey {
-        case tripId = "id"
-        case description, driverName, route, status, origin, stops, destination, endTime, startTime
-    }
 }
 
 enum TripStatus: String, Codable, CaseIterable {
