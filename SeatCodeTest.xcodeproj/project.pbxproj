@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		24A6631A2EF4D28600367ADF /* Polyline in Frameworks */ = {isa = PBXBuildFile; productRef = 24A663192EF4D28600367ADF /* Polyline */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		247D30872EF392A100BD6922 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -40,11 +44,6 @@
 			path = SeatCodeTestTests;
 			sourceTree = "<group>";
 		};
-		247D30932EF392A100BD6922 /* SeatCodeTestUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = SeatCodeTestUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +51,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				24A6631A2EF4D28600367ADF /* Polyline in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,7 +77,6 @@
 			children = (
 				247D307B2EF3929F00BD6922 /* SeatCodeTest */,
 				247D30892EF392A100BD6922 /* SeatCodeTestTests */,
-				247D30932EF392A100BD6922 /* SeatCodeTestUITests */,
 				247D307A2EF3929F00BD6922 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -112,6 +111,7 @@
 			);
 			name = SeatCodeTest;
 			packageProductDependencies = (
+				24A663192EF4D28600367ADF /* Polyline */,
 			);
 			productName = SeatCodeTest;
 			productReference = 247D30792EF3929F00BD6922 /* SeatCodeTest.app */;
@@ -153,9 +153,6 @@
 			dependencies = (
 				247D30922EF392A100BD6922 /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				247D30932EF392A100BD6922 /* SeatCodeTestUITests */,
-			);
 			name = SeatCodeTestUITests;
 			packageProductDependencies = (
 			);
@@ -195,6 +192,9 @@
 			);
 			mainGroup = 247D30702EF3929F00BD6922;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				24A663182EF4D28600367ADF /* XCRemoteSwiftPackageReference "Polyline" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 247D307A2EF3929F00BD6922 /* Products */;
 			projectDirPath = "";
@@ -578,6 +578,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		24A663182EF4D28600367ADF /* XCRemoteSwiftPackageReference "Polyline" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/raphaelmor/Polyline.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		24A663192EF4D28600367ADF /* Polyline */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 24A663182EF4D28600367ADF /* XCRemoteSwiftPackageReference "Polyline" */;
+			productName = Polyline;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 247D30712EF3929F00BD6922 /* Project object */;
 }

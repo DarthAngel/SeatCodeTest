@@ -1,0 +1,15 @@
+{
+  "originHash" : "5026ec9b1879b475a6ac451bfe7c201d3212bdfcb6e99a1b1ca07aa10bab00a0",
+  "pins" : [
+    {
+      "identity" : "polyline",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/raphaelmor/Polyline.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "353f80378dcd8f17eefe8550090c6b1ae3c9da23"
+      }
+    }
+  ],
+  "version" : 3
+}
