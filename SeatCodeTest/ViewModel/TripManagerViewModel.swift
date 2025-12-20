@@ -8,24 +8,24 @@
 import Foundation
 import SwiftUI
 import MapKit
-import Combine
 import Polyline
 
+@Observable
 @MainActor
-class TripManagerViewModel: ObservableObject {
-    @Published var trips: [Trip] = []
-    @Published var selectedTrip: Trip?
-    @Published var selectedTripCoordinates = [CLLocationCoordinate2D]()
-    @Published var stopDetails: [StopDetail] = []
-    @Published var selectedStopDetail: StopDetail?
-    @Published var mapRegion = MKCoordinateRegion(
+class TripManagerViewModel {
+    var trips: [Trip] = []
+    var selectedTrip: Trip?
+    var selectedTripCoordinates = [CLLocationCoordinate2D]()
+    var stopDetails: [StopDetail] = []
+    var selectedStopDetail: StopDetail?
+    var mapRegion = MKCoordinateRegion(
         center: CLLocationCoordinate2D(latitude: 41.3851, longitude: 2.1734), // Barcelona center
         span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
     )
-    @Published var errorMessage: String? = nil
-    @Published var isLoading: Bool = false
-    @Published var showingContactForm = false
-    @Published var showingStopPopup = false
+    var errorMessage: String? = nil
+    var isLoading: Bool = false
+    var showingContactForm = false
+    var showingStopPopup = false
     
     let networkService = NetworkService()
  //   let contactService = ContactService()
@@ -102,7 +102,8 @@ class TripManagerViewModel: ObservableObject {
     func selectStop(stopId: Int, from trip: Trip) {
         // Get stop details if available using the trip's numeric ID
         let tripStopDetails = stopDetails.filter( { $0.tripId == trip.id } )
-        selectedStopDetail =  tripStopDetails[stopId-1]
+        if tripStopDetails.count >= stopId { selectedStopDetail =  tripStopDetails[stopId-1]}
+        else { selectedStopDetail = nil }
         showingStopPopup = true
     }
     

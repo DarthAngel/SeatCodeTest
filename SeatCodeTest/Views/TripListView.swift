@@ -9,7 +9,7 @@ import SwiftUI
 import MapKit
 
 struct TripListView: View {
-    @ObservedObject var viewModel: TripManagerViewModel
+    @State var viewModel: TripManagerViewModel
     
     var body: some View {
         VStack(spacing: 0) {
@@ -18,6 +18,7 @@ struct TripListView: View {
                 Text("Available trips \(viewModel.trips.count)")
                     .font(.title2)
                     .fontWeight(.bold)
+                    .padding(.bottom, 15)
                 
                 Spacer()
                 

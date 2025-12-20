@@ -10,7 +10,7 @@ import MapKit
 import UIKit
 
 struct MainView: View {
-    @StateObject private var viewModel = TripManagerViewModel()
+    @State private var viewModel = TripManagerViewModel()
     @State private var selectedTab = 0
     
     var body: some View {
@@ -62,10 +62,6 @@ struct MainView: View {
                     }
                 }
             }
-        }
-        .onAppear {
-        //     Request notification permission for app badge
-        //     viewModel.contactService.requestNotificationPermission()
         }
     }
 }

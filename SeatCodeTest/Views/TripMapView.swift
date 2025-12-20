@@ -10,8 +10,8 @@ import MapKit
 import CoreLocation
 
 struct TripMapView: View {
-    @ObservedObject var viewModel: TripManagerViewModel
-    @StateObject private var locationManager = LocationManager()
+    @State var viewModel: TripManagerViewModel
+    @State private var locationManager = LocationManager()
     @State private var mapPosition: MapCameraPosition = .automatic
     
     var body: some View {
