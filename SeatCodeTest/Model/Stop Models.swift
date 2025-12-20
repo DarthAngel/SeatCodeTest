@@ -8,31 +8,24 @@
 import Foundation
 import CoreLocation
 
-// ID Generator for Stop objects
-class StopIdGenerator {
-    private var currentId = 0
-    
-    func nextId() -> Int {
-        currentId += 1
-        return currentId
-    }
-    
-    func reset() {
-        currentId = 0
-    }
-}
 
-// ID Generator for StopDetail objects
-class StopDetailIdGenerator {
+
+// ID Generator for StopDetail objects - Using a class with modern concurrency principles
+class StopDetailIdGenerator: @unchecked Sendable {
     private var currentId = 0
+    private let lock = NSLock()
     
     func nextId() -> Int {
-        currentId += 1
-        return currentId
+        lock.withLock {
+            currentId += 1
+            return currentId
+        }
     }
     
     func reset() {
-        currentId = 0
+        lock.withLock {
+            currentId = 0
+        }
     }
 }
 
@@ -48,25 +41,6 @@ struct Stop: Codable, Identifiable {
     
     var coordinate: CLLocationCoordinate2D? {
         point?.coordinate
-    }
-    
-    // Custom coding keys to exclude id from decoding
-    private enum CodingKeys: String, CodingKey {
-        case point
-    }
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        
-        // Get the next available ID from the decoder's userInfo
-        if let idGenerator = decoder.userInfo[.stopIdGenerator] as? StopIdGenerator {
-            self.id = idGenerator.nextId()
-        } else {
-            // Fallback if no generator is provided
-            self.id = 1
-        }
-        
-        self.point = try container.decodeIfPresent(Point.self, forKey: .point)
     }
     
     // Custom initializer for manual creation
@@ -98,14 +72,7 @@ struct StopDetail: Codable, Identifiable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        // Get the next available ID from the decoder's userInfo
-        if let idGenerator = decoder.userInfo[.stopDetailIdGenerator] as? StopDetailIdGenerator {
-            self.id = idGenerator.nextId()
-        } else {
-            // Fallback if no generator is provided
-            self.id = 1
-        }
-        
+        // Decode all other properties first
         self.stopTime = try container.decode(String.self, forKey: .stopTime)
         self.paid = try container.decode(Bool.self, forKey: .paid)
         self.address = try container.decode(String.self, forKey: .address)
@@ -113,6 +80,17 @@ struct StopDetail: Codable, Identifiable {
         self.userName = try container.decode(String.self, forKey: .userName)
         self.point = try container.decode(Point.self, forKey: .point)
         self.price = try container.decode(Double.self, forKey: .price)
+        
+        // Get the next available ID from the decoder's userInfo
+        // This should be called last to ensure each StopDetail gets a unique ID
+        if let idGenerator = decoder.userInfo[.stopDetailIdGenerator] as? StopDetailIdGenerator {
+            self.id = idGenerator.nextId()
+            print("Generated StopDetail ID: \(self.id) for user: \(self.userName)")
+        } else {
+            // Fallback if no generator is provided
+            self.id = 1
+            print("No StopDetailIdGenerator provided, using default ID for user: \(self.userName)")
+        }
     }
     
     // Custom initializer for manual creation
@@ -127,37 +105,11 @@ struct StopDetail: Codable, Identifiable {
         self.price = price
     }
     
-    var formattedTime: String {
-        let formatter = ISO8601DateFormatter()
-        if let date = formatter.date(from: stopTime) {
-            let displayFormatter = DateFormatter()
-            displayFormatter.dateStyle = .none
-            displayFormatter.timeStyle = .short
-            return displayFormatter.string(from: date)
-        }
-        return stopTime
-    }
+
     
     var formattedPrice: String {
         String(format: "%.2f€", price)
     }
 }
 
-// MARK: - Usage Example
-/*
-// Example of how to decode stops with auto-generated IDs:
-let jsonData = // your JSON data
-let decoder = JSONDecoder()
-let stopIdGenerator = StopIdGenerator()
-let stopDetailIdGenerator = StopDetailIdGenerator()
-decoder.userInfo[.stopIdGenerator] = stopIdGenerator
-decoder.userInfo[.stopDetailIdGenerator] = stopDetailIdGenerator
 
-do {
-    let stops = try decoder.decode([Stop].self, from: jsonData)
-    let stopDetails = try decoder.decode([StopDetail].self, from: jsonData)
-    // stops and stopDetails will now have auto-incremented IDs: 1, 2, 3, etc.
-} catch {
-    print("Decoding error: \(error)")
-}
-*/

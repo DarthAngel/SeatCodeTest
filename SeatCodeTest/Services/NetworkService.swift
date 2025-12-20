@@ -8,6 +8,24 @@
 import Foundation
 import Combine
 
+// MARK: - Network Error Types
+enum NetworkError: LocalizedError {
+    case invalidURL
+    case decodingFailed(DecodingError)
+    case requestFailed(Error)
+    
+    var errorDescription: String? {
+        switch self {
+        case .invalidURL:
+            return "The provided URL is invalid"
+        case .decodingFailed(let decodingError):
+            return "Failed to decode data: \(decodingError.localizedDescription)"
+        case .requestFailed(let error):
+            return "Network request failed: \(error.localizedDescription)"
+        }
+    }
+}
+
 // MARK: - Network Dependencies Protocol
 protocol NetworkSessionProtocol {
     func data(from url: URL) async throws -> (Data, URLResponse)
@@ -32,6 +50,8 @@ class NetworkService {
     private let session: NetworkSessionProtocol
     private let configuration: NetworkConfigurationProtocol
     private let decoder: JSONDecoder
+    private let tripIdGenerator: TripIdGenerator
+    private let stopDetailIdGenerator: StopDetailIdGenerator
     
     // MARK: - Initializers
     init(
@@ -42,12 +62,18 @@ class NetworkService {
         self.session = session
         self.configuration = configuration
         self.decoder = decoder
+        self.tripIdGenerator = TripIdGenerator()
+        self.stopDetailIdGenerator = StopDetailIdGenerator()
+        
+        // Set up the decoder with the ID generators
+        self.decoder.userInfo[.tripIdGenerator] = self.tripIdGenerator
+        self.decoder.userInfo[.stopDetailIdGenerator] = self.stopDetailIdGenerator
     }
     
     func loadTrips() async throws -> [Trip] {
         do {
             guard let url = URL(string: configuration.tripsURL) else {
-                throw URLError(.badURL)
+                throw NetworkError.invalidURL
             }
             
             let (data, _) = try await session.data(from: url)
@@ -57,19 +83,39 @@ class NetworkService {
                 print("Trips JSON preview: \(String(jsonString.prefix(500)))...")
             }
             
-            let decodedTrips = try decoder.decode([Trip].self, from: data)
-            print("Successfully loaded \(decodedTrips.count) trips")
-            return decodedTrips
+            do {
+                let decodedTrips = try decoder.decode([Trip].self, from: data)
+                print("Successfully loaded \(decodedTrips.count) trips")
+                return decodedTrips
+            } catch let decodingError as DecodingError {
+                print("Failed to decode trips: \(decodingError.localizedDescription)")
+                switch decodingError {
+                case .typeMismatch(let type, let context):
+                    print("Type mismatch for type \(type) at path: \(context.codingPath)")
+                case .valueNotFound(let type, let context):
+                    print("Value not found for type \(type) at path: \(context.codingPath)")
+                case .keyNotFound(let key, let context):
+                    print("Key '\(key)' not found at path: \(context.codingPath)")
+                case .dataCorrupted(let context):
+                    print("Data corrupted at path: \(context.codingPath)")
+                @unknown default:
+                    print("Unknown decoding error: \(decodingError)")
+                }
+                throw NetworkError.decodingFailed(decodingError)
+            }
             
+        } catch let networkError as NetworkError {
+            throw networkError
         } catch {
-            throw error
+            print("Network request failed: \(error.localizedDescription)")
+            throw NetworkError.requestFailed(error)
         }
     }
     
     func loadStops() async throws -> [StopDetail] {
         do {
             guard let url = URL(string: configuration.stopsURL) else {
-                throw URLError(.badURL)
+                throw NetworkError.invalidURL
             }
             
             let (data, _) = try await session.data(from: url)
@@ -84,17 +130,58 @@ class NetworkService {
             do {
                 // Try decoding as array
                 decodedStops = try decoder.decode([StopDetail].self, from: data)
-            } catch {
-                // If array decoding fails, try decoding as single object and wrap in array
-                let singleStop = try decoder.decode(StopDetail.self, from: data)
-                decodedStops = [singleStop]
+            } catch let arrayDecodingError as DecodingError {
+                print("Failed to decode stops as array: \(arrayDecodingError.localizedDescription)")
+                do {
+                    // If array decoding fails, try decoding as single object and wrap in array
+                    let singleStop = try decoder.decode(StopDetail.self, from: data)
+                    decodedStops = [singleStop]
+                    print("Successfully decoded single stop and wrapped in array")
+                } catch let singleDecodingError as DecodingError {
+                    print("Failed to decode stops as single object: \(singleDecodingError.localizedDescription)")
+                    print("Array decoding error details:")
+                    logDecodingError(arrayDecodingError)
+                    print("Single object decoding error details:")
+                    logDecodingError(singleDecodingError)
+                    throw NetworkError.decodingFailed(arrayDecodingError)
+                }
             }
             
             print("Successfully loaded \(decodedStops.count) stops")
             return decodedStops
             
+        } catch let networkError as NetworkError {
+            throw networkError
         } catch {
-            throw error
+            print("Network request failed: \(error.localizedDescription)")
+            throw NetworkError.requestFailed(error)
+        }
+    }
+    
+    private func logDecodingError(_ error: DecodingError) {
+        switch error {
+        case .typeMismatch(let type, let context):
+            print("Type mismatch for type \(type) at path: \(context.codingPath)")
+            if let description = context.debugDescription.isEmpty ? nil : context.debugDescription {
+                print("Context: \(description)")
+            }
+        case .valueNotFound(let type, let context):
+            print("Value not found for type \(type) at path: \(context.codingPath)")
+            if let description = context.debugDescription.isEmpty ? nil : context.debugDescription {
+                print("Context: \(description)")
+            }
+        case .keyNotFound(let key, let context):
+            print("Key '\(key)' not found at path: \(context.codingPath)")
+            if let description = context.debugDescription.isEmpty ? nil : context.debugDescription {
+                print("Context: \(description)")
+            }
+        case .dataCorrupted(let context):
+            print("Data corrupted at path: \(context.codingPath)")
+            if let description = context.debugDescription.isEmpty ? nil : context.debugDescription {
+                print("Context: \(description)")
+            }
+        @unknown default:
+            print("Unknown decoding error: \(error)")
         }
     }
     

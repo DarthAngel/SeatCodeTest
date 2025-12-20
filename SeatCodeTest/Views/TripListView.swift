@@ -39,9 +39,8 @@ struct TripListView: View {
             } else {
                 // Trip list
                 ScrollView {
-                    LazyVStack(spacing: 12) {
+                    VStack(spacing: 12) {
                         ForEach(viewModel.trips) { trip in
-                            Text("Trip: \(trip.id)")
                             TripCardView(
                                 trip: trip,
                                 isSelected: viewModel.selectedTrip?.id == trip.id
@@ -64,7 +63,8 @@ struct TripListView: View {
                             }
                         }
                     }
-                    .padding()
+                    .padding(.horizontal)
+                    .padding(.bottom)
                 }
                 .refreshable {
                     await viewModel.refreshTrips()

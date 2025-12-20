@@ -8,17 +8,22 @@
 import Foundation
 import CoreLocation
 
-// ID Generator for Trip objects
-class TripIdGenerator {
+// ID Generator for Trip objects - Using a class with modern concurrency principles
+class TripIdGenerator: @unchecked Sendable {
     private var currentId = 0
+    private let lock = NSLock()
     
     func nextId() -> Int {
-        currentId += 1
-        return currentId
+        lock.withLock {
+            currentId += 1
+            return currentId
+        }
     }
     
     func reset() {
-        currentId = 0
+        lock.withLock {
+            currentId = 0
+        }
     }
 }
 
@@ -46,24 +51,47 @@ struct Trip: Codable, Identifiable {
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        
-        // Get the next available ID from the decoder's userInfo
-        if let idGenerator = decoder.userInfo[.tripIdGenerator] as? TripIdGenerator {
-            self.id = idGenerator.nextId()
-        } else {
-            // Fallback if no generator is provided
-            self.id = 1
-        }
-        
+        print("Starting decoding ======>")
+        // Decode all other properties first
         self.description = try container.decode(String.self, forKey: .description)
         self.driverName = try container.decode(String.self, forKey: .driverName)
         self.route = try container.decode(String.self, forKey: .route)
         self.status = try container.decode(TripStatus.self, forKey: .status)
         self.origin = try container.decode(Location.self, forKey: .origin)
-        self.stops = try container.decode([Stop].self, forKey: .stops)
+        // Handle optional stops - decode as empty array if key is missing, empty, or contains invalid objects
+        if let stopsContainer = try? container.nestedUnkeyedContainer(forKey: .stops) {
+            var tempStops: [Stop] = []
+            var mutableContainer = stopsContainer
+            
+            while !mutableContainer.isAtEnd {
+                do {
+                    let stop = try mutableContainer.decode(Stop.self)
+                    tempStops.append(stop)
+                } catch {
+                    // Skip invalid stop objects (like empty objects {})
+                    print("Skipping invalid stop object: \(error)")
+                    _ = try? mutableContainer.decode([String: String].self) // Consume the invalid object
+                }
+            }
+            self.stops = tempStops
+        } else {
+            self.stops = []
+        }
         self.destination = try container.decode(Location.self, forKey: .destination)
         self.endTime = try container.decode(String.self, forKey: .endTime)
         self.startTime = try container.decode(String.self, forKey: .startTime)
+        
+        // Get the next available ID from the decoder's userInfo
+        // This should be called last to ensure each Trip gets a unique ID
+        print("Generating id for trip: \(self.description)")
+        if let idGenerator = decoder.userInfo[.tripIdGenerator] as? TripIdGenerator {
+            self.id = idGenerator.nextId()
+            print("Generated ID: \(self.id) for trip: \(self.description)")
+        } else {
+            // Fallback if no generator is provided
+            self.id = 1
+            print("No TripIdGenerator provided, using default ID for trip: \(self.description)")
+        }
     }
     
     // Custom initializer for manual creation
@@ -114,18 +142,4 @@ enum TripStatus: String, Codable, CaseIterable {
     }
 }
 
-// MARK: - Usage Example
-/*
-// Example of how to decode trips with auto-generated IDs:
-let jsonData = // your JSON data
-let decoder = JSONDecoder()
-let idGenerator = TripIdGenerator()
-decoder.userInfo[.tripIdGenerator] = idGenerator
 
-do {
-    let trips = try decoder.decode([Trip].self, from: jsonData)
-    // trips will now have IDs: 1, 2, 3, etc.
-} catch {
-    print("Decoding error: \(error)")
-}
-*/
