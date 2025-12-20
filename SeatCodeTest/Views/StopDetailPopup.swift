@@ -118,7 +118,7 @@ struct StopDetailPopup: View {
                                     .foregroundColor(.secondary)
                                 
                                 HStack {
-                                    Text(stop.formattedPrice)
+                                    Text(String(stop.price).formatPrice())
                                         .font(.subheadline)
                                         .fontWeight(.medium)
                                     

@@ -45,14 +45,26 @@ final class SeatCodeTestNetworkTests: XCTestCase {
     var networkService: NetworkService!
     var mockSession: MockNetworkSession!
     var testConfiguration: TestNetworkConfiguration!
+    var decoder: JSONDecoder!
+    var tripIdGenerator: TripIdGenerator!
+    var stopDetailIdGenerator: StopDetailIdGenerator!
     
     override func setUpWithError() throws {
         try super.setUpWithError()
         mockSession = MockNetworkSession()
         testConfiguration = TestNetworkConfiguration()
+        decoder = JSONDecoder()
+        tripIdGenerator = TripIdGenerator()
+        stopDetailIdGenerator = StopDetailIdGenerator()
+        
+        // Set up decoder with ID generators
+        decoder.userInfo[.tripIdGenerator] = tripIdGenerator
+        decoder.userInfo[.stopDetailIdGenerator] = stopDetailIdGenerator
+        
         networkService = NetworkService(
             session: mockSession,
-            configuration: testConfiguration
+            configuration: testConfiguration,
+            decoder: decoder
         )
     }
     
@@ -60,6 +72,9 @@ final class SeatCodeTestNetworkTests: XCTestCase {
         networkService = nil
         mockSession = nil
         testConfiguration = nil
+        decoder = nil
+        tripIdGenerator = nil
+        stopDetailIdGenerator = nil
         try await super.tearDown()
     }
     
@@ -69,7 +84,6 @@ final class SeatCodeTestNetworkTests: XCTestCase {
         let jsonString = """
         [
             {
-                "id": 1,
                 "description": "Test Trip 1",
                 "driverName": "John Doe",
                 "route": "Route A",
@@ -101,7 +115,6 @@ final class SeatCodeTestNetworkTests: XCTestCase {
                 ]
             },
             {
-                "id": 2,
                 "description": "Test Trip 2",
                 "driverName": "Jane Smith",
                 "route": "Route B",
@@ -132,13 +145,12 @@ final class SeatCodeTestNetworkTests: XCTestCase {
     private func createMockSingleStopData() -> Data {
         let jsonString = """
         {
-            "id": 1,
-            "tripId": 1,
             "stopTime": "2024-01-01T09:30:00Z",
             "address": "123 Test Street, Test City",
             "userName": "Test User",
             "price": 25.50,
             "paid": true,
+            "tripId": 1,
             "point": {
                 "_latitude": 40.7128,
                 "_longitude": -74.0060
@@ -152,26 +164,24 @@ final class SeatCodeTestNetworkTests: XCTestCase {
         let jsonString = """
         [
             {
-                "id": 1,
-                "tripId": 1,
                 "stopTime": "2024-01-01T09:30:00Z",
                 "address": "123 Test Street, Test City",
                 "userName": "Test User",
                 "price": 25.50,
                 "paid": true,
+                "tripId": 1,
                 "point": {
                     "_latitude": 40.7128,
                     "_longitude": -74.0060
                 }
             },
             {
-                "id": 2,
-                "tripId": 2,
                 "stopTime": "2024-01-01T14:15:00Z",
                 "address": "456 Another Street, Another City",
                 "userName": "Another User",
                 "price": 30.75,
                 "paid": false,
+                "tripId": 2,
                 "point": {
                     "_latitude": 40.7589,
                     "_longitude": -73.9851
@@ -197,9 +207,9 @@ final class SeatCodeTestNetworkTests: XCTestCase {
         XCTAssertFalse(trips.isEmpty, "Trips array should not be empty")
         XCTAssertEqual(trips.count, 2, "Should load 2 trips from mock data")
         
-        // Verify first trip
+        // Verify first trip (IDs are now auto-generated, so they should be 1 and 2)
         let firstTrip = trips[0]
-        XCTAssertEqual(firstTrip.id, 1)
+        XCTAssertEqual(firstTrip.id, 1, "First trip should have auto-generated ID 1")
         XCTAssertEqual(firstTrip.description, "Test Trip 1")
         XCTAssertEqual(firstTrip.driverName, "John Doe")
         XCTAssertEqual(firstTrip.route, "Route A")
@@ -210,6 +220,11 @@ final class SeatCodeTestNetworkTests: XCTestCase {
         let originCoord = firstTrip.origin.point.coordinate
         XCTAssertEqual(originCoord.latitude, 40.7128, accuracy: 0.0001)
         XCTAssertEqual(originCoord.longitude, -74.0060, accuracy: 0.0001)
+        
+        // Verify second trip has ID 2
+        let secondTrip = trips[1]
+        XCTAssertEqual(secondTrip.id, 2, "Second trip should have auto-generated ID 2")
+        XCTAssertEqual(secondTrip.description, "Test Trip 2")
     }
     
     func testLoadTripsVerifyTripStatus() async throws {
@@ -253,8 +268,16 @@ final class SeatCodeTestNetworkTests: XCTestCase {
         do {
             _ = try await networkService.loadTrips()
             XCTFail("Should have thrown an error")
+        } catch let networkError as NetworkError {
+            // Verify it's wrapped in NetworkError.requestFailed
+            switch networkError {
+            case .requestFailed(let underlyingError):
+                XCTAssertTrue(underlyingError is URLError)
+            default:
+                XCTFail("Expected NetworkError.requestFailed, got \(networkError)")
+            }
         } catch {
-            XCTAssertTrue(error is URLError)
+            XCTFail("Expected NetworkError, got \(error)")
         }
     }
     
@@ -265,8 +288,17 @@ final class SeatCodeTestNetworkTests: XCTestCase {
         do {
             _ = try await networkService.loadTrips()
             XCTFail("Should have thrown a decoding error")
+        } catch let networkError as NetworkError {
+            // Verify it's wrapped in NetworkError.decodingFailed
+            switch networkError {
+            case .decodingFailed:
+                // Successfully caught the expected decodingFailed error
+                break
+            default:
+                XCTFail("Expected NetworkError.decodingFailed, got \(networkError)")
+            }
         } catch {
-            XCTAssertTrue(error is DecodingError)
+            XCTFail("Expected NetworkError, got \(error)")
         }
     }
     
@@ -285,13 +317,14 @@ final class SeatCodeTestNetworkTests: XCTestCase {
         XCTAssertFalse(stops.isEmpty, "Stops array should not be empty")
         XCTAssertEqual(stops.count, 1, "Should load 1 stop from single object mock data")
         
-        // Verify stop properties
+        // Verify stop properties (ID is now auto-generated)
         let stop = stops[0]
-        XCTAssertEqual(stop.id, 1)
+        XCTAssertEqual(stop.id, 1, "Stop should have auto-generated ID 1")
         XCTAssertEqual(stop.stopTime, "2024-01-01T09:30:00Z")
         XCTAssertEqual(stop.address, "123 Test Street, Test City")
         XCTAssertEqual(stop.userName, "Test User")
         XCTAssertEqual(stop.price, 25.50, accuracy: 0.01)
+        XCTAssertEqual(stop.tripId, 1)
         
         // Verify coordinates
         let coord = stop.coordinate
@@ -309,15 +342,17 @@ final class SeatCodeTestNetworkTests: XCTestCase {
         XCTAssertFalse(stops.isEmpty, "Stops array should not be empty")
         XCTAssertEqual(stops.count, 2, "Should load 2 stops from array mock data")
         
-        // Verify first stop
+        // Verify first stop (ID is now auto-generated)
         let firstStop = stops[0]
-        XCTAssertEqual(firstStop.id, 1)
+        XCTAssertEqual(firstStop.id, 1, "First stop should have auto-generated ID 1")
         XCTAssertEqual(firstStop.userName, "Test User")
+        XCTAssertEqual(firstStop.tripId, 1)
         
         // Verify second stop
         let secondStop = stops[1]
-        XCTAssertEqual(secondStop.id, 2)
+        XCTAssertEqual(secondStop.id, 2, "Second stop should have auto-generated ID 2")
         XCTAssertEqual(secondStop.userName, "Another User")
+        XCTAssertEqual(secondStop.tripId, 2)
     }
     
     func testLoadStopsVerifyFormattedProperties() async throws {
@@ -332,11 +367,13 @@ final class SeatCodeTestNetworkTests: XCTestCase {
         let stop = stops[0]
         
         // Test formatted time is not empty
-        XCTAssertFalse(stop.formattedTime.isEmpty, "Formatted time should not be empty")
+        XCTAssertFalse(stop.stopTime.formatTime().isEmpty, "Formatted time should not be empty")
         
         // Test formatted price contains currency symbol
-        XCTAssertTrue(stop.formattedPrice.contains("€"), "Formatted price should contain currency symbol")
-        XCTAssertTrue(stop.formattedPrice.contains("25.50"), "Formatted price should contain the correct numeric value")
+        let priceString = String(stop.price)
+        let formattedPrice = priceString.formatPrice()
+        XCTAssertTrue(formattedPrice.contains("€"), "Formatted price should contain currency symbol")
+        XCTAssertTrue(formattedPrice.contains("25.50"), "Formatted price should contain the correct numeric value")
     }
     
     func testLoadStopsNetworkError() async throws {
@@ -346,10 +383,18 @@ final class SeatCodeTestNetworkTests: XCTestCase {
         do {
             _ = try await networkService.loadStops()
             XCTFail("Should have thrown an error")
+        } catch let networkError as NetworkError {
+            // Verify it's wrapped in NetworkError.requestFailed
+            switch networkError {
+            case .requestFailed(let underlyingError):
+                XCTAssertTrue(underlyingError is URLError)
+                let urlError = underlyingError as! URLError
+                XCTAssertEqual(urlError.code, .timedOut)
+            default:
+                XCTFail("Expected NetworkError.requestFailed, got \(networkError)")
+            }
         } catch {
-            XCTAssertTrue(error is URLError)
-            let urlError = error as! URLError
-            XCTAssertEqual(urlError.code, .timedOut)
+            XCTFail("Expected NetworkError, got \(error)")
         }
     }
     
@@ -360,8 +405,17 @@ final class SeatCodeTestNetworkTests: XCTestCase {
         do {
             _ = try await networkService.loadStops()
             XCTFail("Should have thrown a decoding error")
+        } catch let networkError as NetworkError {
+            // Verify it's wrapped in NetworkError.decodingFailed
+            switch networkError {
+            case .decodingFailed:
+                // Successfully caught the expected decodingFailed error
+                break
+            default:
+                XCTFail("Expected NetworkError.decodingFailed, got \(networkError)")
+            }
         } catch {
-            XCTAssertTrue(error is DecodingError)
+            XCTFail("Expected NetworkError, got \(error)")
         }
     }
     
@@ -372,6 +426,10 @@ final class SeatCodeTestNetworkTests: XCTestCase {
         mockSession.mockData = createMockTripsData()
         let trips = try await networkService.loadTrips()
         
+        // Reset ID generators to ensure clean IDs for stops test
+        tripIdGenerator.reset()
+        stopDetailIdGenerator.reset()
+        
         // Reset for stops call
         mockSession.mockData = createMockSingleStopData()
         let stops = try await networkService.loadStops()
@@ -379,12 +437,14 @@ final class SeatCodeTestNetworkTests: XCTestCase {
         XCTAssertFalse(trips.isEmpty, "Trips should be loaded successfully")
         XCTAssertFalse(stops.isEmpty, "Stops should be loaded successfully")
         
-        // Extract all trip IDs from trips
+        // Extract all trip IDs from trips (these will be auto-generated: 1, 2)
         let tripIds = Set(trips.compactMap { $0.id })
         
-        // Verify stop references valid trip ID
+        // Verify stop references valid trip ID from the tripId field in the JSON
         for stop in stops {
-            XCTAssertTrue(tripIds.contains(stop.id), "Stop should reference a valid trip ID")
+            // The stop.tripId comes from the JSON data and should reference a valid trip
+            // Note: In the mock data, we have tripId: 1, which should match one of our generated trip IDs
+            XCTAssertTrue(tripIds.contains(stop.tripId), "Stop should reference a valid trip ID. Stop tripId: \(stop.tripId), Available trip IDs: \(tripIds)")
         }
     }
     
@@ -433,17 +493,100 @@ final class SeatCodeTestNetworkTests: XCTestCase {
         
         let invalidNetworkService = NetworkService(
             session: mockSession,
-            configuration: InvalidURLConfiguration()
+            configuration: InvalidURLConfiguration(),
+            decoder: decoder
         )
         
         do {
             _ = try await invalidNetworkService.loadTrips()
-            XCTFail("Should have thrown URLError.badURL")
+            XCTFail("Should have thrown NetworkError.invalidURL")
+        } catch let networkError as NetworkError {
+            switch networkError {
+            case .invalidURL:
+                // This is expected
+                break
+            default:
+                XCTFail("Expected NetworkError.invalidURL, got \(networkError)")
+            }
         } catch {
-            XCTAssertTrue(error is URLError)
-            let urlError = error as! URLError
-            XCTAssertEqual(urlError.code, .badURL)
+            XCTFail("Expected NetworkError, got \(error)")
         }
+    }
+    
+    // MARK: - ID Generation Tests
+    
+    func testTripIdGenerationIsSequential() async throws {
+        // Setup mock data
+        mockSession.mockData = createMockTripsData()
+        
+        // Load trips twice to verify ID generation is sequential
+        let firstBatch = try await networkService.loadTrips()
+        let secondBatch = try await networkService.loadTrips()
+        
+        XCTAssertEqual(firstBatch.count, 2)
+        XCTAssertEqual(secondBatch.count, 2)
+        
+        // First batch should have IDs 1, 2
+        XCTAssertEqual(firstBatch[0].id, 1)
+        XCTAssertEqual(firstBatch[1].id, 2)
+        
+        // Second batch should continue with IDs 3, 4
+        XCTAssertEqual(secondBatch[0].id, 3)
+        XCTAssertEqual(secondBatch[1].id, 4)
+    }
+    
+    func testStopDetailIdGenerationIsSequential() async throws {
+        // Setup mock data
+        mockSession.mockData = createMockMultipleStopsData()
+        
+        // Load stops twice to verify ID generation is sequential
+        let firstBatch = try await networkService.loadStops()
+        let secondBatch = try await networkService.loadStops()
+        
+        XCTAssertEqual(firstBatch.count, 2)
+        XCTAssertEqual(secondBatch.count, 2)
+        
+        // First batch should have IDs 1, 2
+        XCTAssertEqual(firstBatch[0].id, 1)
+        XCTAssertEqual(firstBatch[1].id, 2)
+        
+        // Second batch should continue with IDs 3, 4
+        XCTAssertEqual(secondBatch[0].id, 3)
+        XCTAssertEqual(secondBatch[1].id, 4)
+    }
+    
+    func testIdGeneratorsCanBeReset() async throws {
+        // Load some trips first
+        mockSession.mockData = createMockTripsData()
+        let firstTrips = try await networkService.loadTrips()
+        XCTAssertEqual(firstTrips[0].id, 1)
+        XCTAssertEqual(firstTrips[1].id, 2)
+        
+        // Reset the generator and update the decoder
+        tripIdGenerator.reset()
+        decoder.userInfo[.tripIdGenerator] = tripIdGenerator
+        
+        // Create a new network service with the updated decoder
+        networkService = NetworkService(
+            session: mockSession,
+            configuration: testConfiguration,
+            decoder: decoder
+        )
+        
+        // Load trips again, should start from 1
+        let secondTrips = try await networkService.loadTrips()
+        XCTAssertEqual(secondTrips[0].id, 1)
+        XCTAssertEqual(secondTrips[1].id, 2)
+    }
+    
+    func testNetworkErrorDescriptions() throws {
+        let invalidURLError = NetworkError.invalidURL
+        let decodingError = NetworkError.decodingFailed(DecodingError.dataCorrupted(DecodingError.Context(codingPath: [], debugDescription: "Test")))
+        let requestError = NetworkError.requestFailed(URLError(.notConnectedToInternet))
+        
+        XCTAssertEqual(invalidURLError.errorDescription, "The provided URL is invalid")
+        XCTAssertTrue(decodingError.errorDescription?.contains("Failed to decode data") == true)
+        XCTAssertTrue(requestError.errorDescription?.contains("Network request failed") == true)
     }
     
    

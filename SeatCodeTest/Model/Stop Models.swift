@@ -107,9 +107,6 @@ struct StopDetail: Codable, Identifiable {
     
 
     
-    var formattedPrice: String {
-        String(format: "%.2f€", price)
-    }
 }
 
 

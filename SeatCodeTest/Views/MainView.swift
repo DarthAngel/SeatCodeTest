@@ -64,8 +64,8 @@ struct MainView: View {
             }
         }
         .onAppear {
-            // Request notification permission for app badge
-           // viewModel.contactService.requestNotificationPermission()
+        //     Request notification permission for app badge
+        //     viewModel.contactService.requestNotificationPermission()
         }
     }
 }

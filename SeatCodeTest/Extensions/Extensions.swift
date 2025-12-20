@@ -23,4 +23,12 @@ extension String {
         }
         return "Invalid Time"
     }
+    
+    func formatPrice() -> String {
+        if let price = Double(self) {
+            return String(format: "%.2f€", price)
+        }
+        return "\(self)€" // Fallback if string can't be parsed as Double
+    }
+    
 }
