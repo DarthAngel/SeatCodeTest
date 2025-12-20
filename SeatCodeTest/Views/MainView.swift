@@ -10,6 +10,9 @@ import MapKit
 import UIKit
 
 struct MainView: View {
+    
+    // MARK: PROPERTIES
+    
     @State private var viewModel = TripManagerViewModel()
     @State private var selectedTab = 0
     
@@ -39,9 +42,9 @@ struct MainView: View {
                     }
                 }
             }
-//            .sheet(isPresented: $viewModel.showingContactForm) {
-//                ContactFormView(contactService: viewModel.contactService)
-//            }
+            .sheet(isPresented: $viewModel.showingContactForm) {
+                ContactFormView(contactService: viewModel.contactService)
+            }
             .overlay {
                 // Stop detail popup
                 if viewModel.showingStopPopup {
@@ -62,6 +65,10 @@ struct MainView: View {
                     }
                 }
             }
+        }
+        .onAppear {
+            // Request notification permission for app badge
+            viewModel.contactService.requestNotificationPermission()
         }
     }
 }

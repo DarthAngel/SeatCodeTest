@@ -28,7 +28,7 @@ class TripManagerViewModel {
     var showingStopPopup = false
     
     let networkService = NetworkService()
- //   let contactService = ContactService()
+    let contactService = ContactService()
     
     init() {
         // Load data when view model is created
