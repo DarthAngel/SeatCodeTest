@@ -73,11 +73,13 @@ struct ContactFormView: View {
                     Text("All fields marked with * are required")
                         .font(.caption)
                         .foregroundColor(.secondary)
+                    
+                    Button("View previously submitted reports") {
+                            showingReports = true
+                    }
                 }
                 
-                Button("View previously submitted reports") {
-                        showingReports = true
-                }
+                
 
                 
             }

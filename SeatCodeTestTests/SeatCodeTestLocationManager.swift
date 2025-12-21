@@ -18,10 +18,10 @@ final class SeatCodeTestLocationManager: XCTestCase {
     
     override func setUpWithError() throws {
         try super.setUpWithError()
+        
         locationManager = LocationManager()
         cancellables = Set<AnyCancellable>()
     }
-    @MainActor
     override func tearDown() async throws {
         locationManager = nil
         cancellables = nil
