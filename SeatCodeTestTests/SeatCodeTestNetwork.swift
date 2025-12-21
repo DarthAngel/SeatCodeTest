@@ -10,13 +10,31 @@ import CoreLocation
 @testable import SeatCodeTest
 
 // MARK: - Mock Network Session
-class MockNetworkSession: NetworkSessionProtocol {
-    var mockData: Data?
-    var mockError: Error?
-    var requestedURL: URL?
+@MainActor
+final class MockNetworkSession: NetworkSessionProtocol {
+    private var _mockData: Data?
+    private var _mockError: Error?
+    private var _requestedURL: URL?
+    
+    var mockData: Data? {
+        get { _mockData }
+        set { _mockData = newValue }
+    }
+    
+    var mockError: Error? {
+        get { _mockError }
+        set { _mockError = newValue }
+    }
+    
+    var requestedURL: URL? {
+        get { _requestedURL }
+        set { _requestedURL = newValue }
+    }
     
     func data(from url: URL) async throws -> (Data, URLResponse) {
-        requestedURL = url
+        await MainActor.run {
+            _requestedURL = url
+        }
         
         if let error = mockError {
             throw error
@@ -34,12 +52,11 @@ class MockNetworkSession: NetworkSessionProtocol {
 }
 
 // MARK: - Test Configuration
-struct TestNetworkConfiguration: NetworkConfigurationProtocol {
+struct TestNetworkConfiguration: NetworkConfigurationProtocol, Sendable {
     let tripsURL = "https://test-api.com/trips.json"
     let stopsURL = "https://test-api.com/stops.json"
 }
 
-@MainActor
 final class SeatCodeTestNetworkTests: XCTestCase {
     
     var networkService: NetworkService!
@@ -49,8 +66,9 @@ final class SeatCodeTestNetworkTests: XCTestCase {
     var tripIdGenerator: TripIdGenerator!
     var stopDetailIdGenerator: StopDetailIdGenerator!
     
-    override func setUpWithError() throws {
-        try super.setUpWithError()
+    @MainActor
+    override func setUp() async throws {
+        try await super.setUp()
         mockSession = MockNetworkSession()
         testConfiguration = TestNetworkConfiguration()
         decoder = JSONDecoder()
@@ -68,13 +86,17 @@ final class SeatCodeTestNetworkTests: XCTestCase {
         )
     }
     
+    @MainActor
     override func tearDown() async throws {
+        // Clean up references explicitly
         networkService = nil
         mockSession = nil
         testConfiguration = nil
         decoder = nil
         tripIdGenerator = nil
         stopDetailIdGenerator = nil
+        
+        // Call super tearDown
         try await super.tearDown()
     }
     
@@ -194,6 +216,7 @@ final class SeatCodeTestNetworkTests: XCTestCase {
     
     // MARK: - Trip Loading Tests
     
+    @MainActor
     func testLoadTripsSuccess() async throws {
         // Setup mock data
         mockSession.mockData = createMockTripsData()
@@ -227,6 +250,7 @@ final class SeatCodeTestNetworkTests: XCTestCase {
         XCTAssertEqual(secondTrip.description, "Test Trip 2")
     }
     
+    @MainActor
     func testLoadTripsVerifyTripStatus() async throws {
         // Setup mock data
         mockSession.mockData = createMockTripsData()
@@ -239,6 +263,7 @@ final class SeatCodeTestNetworkTests: XCTestCase {
         XCTAssertEqual(trips[1].status, .ongoing)
     }
     
+    @MainActor
     func testLoadTripsVerifyStopsStructure() async throws {
         // Setup mock data
         mockSession.mockData = createMockTripsData()
@@ -261,6 +286,7 @@ final class SeatCodeTestNetworkTests: XCTestCase {
         XCTAssertEqual(trips[1].stops.count, 0)
     }
     
+    @MainActor
     func testLoadTripsNetworkError() async throws {
         // Setup mock error
         mockSession.mockError = URLError(.notConnectedToInternet)
@@ -281,6 +307,7 @@ final class SeatCodeTestNetworkTests: XCTestCase {
         }
     }
     
+    @MainActor
     func testLoadTripsInvalidJSON() async throws {
         // Setup invalid JSON data
         mockSession.mockData = "invalid json".data(using: .utf8)
@@ -304,6 +331,7 @@ final class SeatCodeTestNetworkTests: XCTestCase {
     
     // MARK: - Stop Details Loading Tests
     
+    @MainActor
     func testLoadStopsSuccessWithSingleStop() async throws {
         // Setup mock data for single stop (current API behavior)
         mockSession.mockData = createMockSingleStopData()
@@ -332,6 +360,7 @@ final class SeatCodeTestNetworkTests: XCTestCase {
         XCTAssertEqual(coord.longitude, -74.0060, accuracy: 0.0001)
     }
     
+    @MainActor
     func testLoadStopsSuccessWithMultipleStops() async throws {
         // Setup mock data for multiple stops (future API behavior)
         mockSession.mockData = createMockMultipleStopsData()
@@ -355,6 +384,7 @@ final class SeatCodeTestNetworkTests: XCTestCase {
         XCTAssertEqual(secondStop.tripId, 2)
     }
     
+    @MainActor
     func testLoadStopsVerifyFormattedProperties() async throws {
         // Setup mock data
         mockSession.mockData = createMockSingleStopData()
@@ -376,6 +406,7 @@ final class SeatCodeTestNetworkTests: XCTestCase {
         XCTAssertTrue(formattedPrice.contains("25.50"), "Formatted price should contain the correct numeric value")
     }
     
+    @MainActor
     func testLoadStopsNetworkError() async throws {
         // Setup mock error
         mockSession.mockError = URLError(.timedOut)
@@ -398,6 +429,7 @@ final class SeatCodeTestNetworkTests: XCTestCase {
         }
     }
     
+    @MainActor
     func testLoadStopsInvalidJSON() async throws {
         // Setup invalid JSON data
         mockSession.mockData = "{ invalid json }".data(using: .utf8)
@@ -421,6 +453,7 @@ final class SeatCodeTestNetworkTests: XCTestCase {
     
     // MARK: - Integration Tests
     
+    @MainActor
     func testLoadTripsAndStopsDataAssociation() async throws {
         // Setup mock data for both endpoints
         mockSession.mockData = createMockTripsData()
@@ -450,6 +483,7 @@ final class SeatCodeTestNetworkTests: XCTestCase {
     
     // MARK: - URL Validation Tests
     
+    @MainActor
     func testLoadTripsCallsCorrectURL() async throws {
         mockSession.mockData = createMockTripsData()
         
@@ -458,6 +492,7 @@ final class SeatCodeTestNetworkTests: XCTestCase {
         XCTAssertEqual(mockSession.requestedURL?.absoluteString, testConfiguration.tripsURL)
     }
     
+    @MainActor
     func testLoadStopsCallsCorrectURL() async throws {
         mockSession.mockData = createMockSingleStopData()
         
@@ -468,6 +503,7 @@ final class SeatCodeTestNetworkTests: XCTestCase {
     
     // MARK: - Edge Case Tests
     
+    @MainActor
     func testLoadTripsEmptyArray() async throws {
         mockSession.mockData = "[]".data(using: .utf8)
         
@@ -476,6 +512,7 @@ final class SeatCodeTestNetworkTests: XCTestCase {
         XCTAssertTrue(trips.isEmpty, "Should handle empty array correctly")
     }
     
+    @MainActor
     func testLoadStopsEmptyArray() async throws {
         mockSession.mockData = "[]".data(using: .utf8)
         
@@ -484,9 +521,10 @@ final class SeatCodeTestNetworkTests: XCTestCase {
         XCTAssertTrue(stops.isEmpty, "Should handle empty array correctly")
     }
     
+    @MainActor
     func testInvalidURLError() async throws {
         // Create a configuration with invalid URLs
-        struct InvalidURLConfiguration: NetworkConfigurationProtocol {
+        struct InvalidURLConfiguration: NetworkConfigurationProtocol, Sendable {
             let tripsURL = ""
             let stopsURL = ""
         }
@@ -515,6 +553,7 @@ final class SeatCodeTestNetworkTests: XCTestCase {
     
     // MARK: - ID Generation Tests
     
+    @MainActor
     func testTripIdGenerationIsSequential() async throws {
         // Setup mock data
         mockSession.mockData = createMockTripsData()
@@ -535,6 +574,7 @@ final class SeatCodeTestNetworkTests: XCTestCase {
         XCTAssertEqual(secondBatch[1].id, 4)
     }
     
+    @MainActor
     func testStopDetailIdGenerationIsSequential() async throws {
         // Setup mock data
         mockSession.mockData = createMockMultipleStopsData()
@@ -555,6 +595,7 @@ final class SeatCodeTestNetworkTests: XCTestCase {
         XCTAssertEqual(secondBatch[1].id, 4)
     }
     
+    @MainActor
     func testIdGeneratorsCanBeReset() async throws {
         // Load some trips first
         mockSession.mockData = createMockTripsData()

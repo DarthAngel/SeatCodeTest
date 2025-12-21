@@ -1,0 +1,38 @@
+{
+  "configurations" : [
+    {
+      "id" : "554D5ABC-80C2-460C-A626-929F588FB53C",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "performanceAntipatternCheckerEnabled" : true,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:SeatCodeTest.xcodeproj",
+      "identifier" : "247D30782EF3929F00BD6922",
+      "name" : "SeatCodeTest"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:SeatCodeTest.xcodeproj",
+        "identifier" : "247D30852EF392A100BD6922",
+        "name" : "SeatCodeTestTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:SeatCodeTest.xcodeproj",
+        "identifier" : "247D308F2EF392A100BD6922",
+        "name" : "SeatCodeTestUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

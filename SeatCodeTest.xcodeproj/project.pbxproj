@@ -28,6 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		243A9BEC2EF779D500454879 /* SeatCodeTest.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = file; path = SeatCodeTest.xctestplan; sourceTree = "<group>"; };
 		247D30792EF3929F00BD6922 /* SeatCodeTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SeatCodeTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		247D30862EF392A100BD6922 /* SeatCodeTestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SeatCodeTestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		247D30902EF392A100BD6922 /* SeatCodeTestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SeatCodeTestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -75,6 +76,7 @@
 		247D30702EF3929F00BD6922 = {
 			isa = PBXGroup;
 			children = (
+				243A9BEC2EF779D500454879 /* SeatCodeTest.xctestplan */,
 				247D307B2EF3929F00BD6922 /* SeatCodeTest */,
 				247D30892EF392A100BD6922 /* SeatCodeTestTests */,
 				247D307A2EF3929F00BD6922 /* Products */,
@@ -472,7 +474,7 @@
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SeatCodeTest.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SeatCodeTest";
 			};
@@ -494,7 +496,7 @@
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SeatCodeTest.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SeatCodeTest";
 			};
