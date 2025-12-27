@@ -18,7 +18,7 @@
 			remoteGlobalIDString = 247D30782EF3929F00BD6922;
 			remoteInfo = SeatCodeTest;
 		};
-		247D30912EF392A100BD6922 /* PBXContainerItemProxy */ = {
+		24A3E5B02EFFE759000D6F12 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 247D30712EF3929F00BD6922 /* Project object */;
 			proxyType = 1;
@@ -28,10 +28,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		243A9BEC2EF779D500454879 /* SeatCodeTest.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = SeatCodeTest.xctestplan; sourceTree = "<group>"; };
 		247D30792EF3929F00BD6922 /* SeatCodeTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SeatCodeTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		247D30862EF392A100BD6922 /* SeatCodeTestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SeatCodeTestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		247D30902EF392A100BD6922 /* SeatCodeTestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SeatCodeTestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		24A3E5AA2EFFE759000D6F12 /* SeatCodeTestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SeatCodeTestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -43,6 +42,11 @@
 		247D30892EF392A100BD6922 /* SeatCodeTestTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = SeatCodeTestTests;
+			sourceTree = "<group>";
+		};
+		24A3E5AB2EFFE759000D6F12 /* SeatCodeTestUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = SeatCodeTestUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -63,7 +67,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		247D308D2EF392A100BD6922 /* Frameworks */ = {
+		24A3E5A72EFFE759000D6F12 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -76,9 +80,9 @@
 		247D30702EF3929F00BD6922 = {
 			isa = PBXGroup;
 			children = (
-				243A9BEC2EF779D500454879 /* SeatCodeTest.xctestplan */,
 				247D307B2EF3929F00BD6922 /* SeatCodeTest */,
 				247D30892EF392A100BD6922 /* SeatCodeTestTests */,
+				24A3E5AB2EFFE759000D6F12 /* SeatCodeTestUITests */,
 				247D307A2EF3929F00BD6922 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -88,7 +92,7 @@
 			children = (
 				247D30792EF3929F00BD6922 /* SeatCodeTest.app */,
 				247D30862EF392A100BD6922 /* SeatCodeTestTests.xctest */,
-				247D30902EF392A100BD6922 /* SeatCodeTestUITests.xctest */,
+				24A3E5AA2EFFE759000D6F12 /* SeatCodeTestUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -142,24 +146,27 @@
 			productReference = 247D30862EF392A100BD6922 /* SeatCodeTestTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		247D308F2EF392A100BD6922 /* SeatCodeTestUITests */ = {
+		24A3E5A92EFFE759000D6F12 /* SeatCodeTestUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 247D30A02EF392A200BD6922 /* Build configuration list for PBXNativeTarget "SeatCodeTestUITests" */;
+			buildConfigurationList = 24A3E5B22EFFE759000D6F12 /* Build configuration list for PBXNativeTarget "SeatCodeTestUITests" */;
 			buildPhases = (
-				247D308C2EF392A100BD6922 /* Sources */,
-				247D308D2EF392A100BD6922 /* Frameworks */,
-				247D308E2EF392A100BD6922 /* Resources */,
+				24A3E5A62EFFE759000D6F12 /* Sources */,
+				24A3E5A72EFFE759000D6F12 /* Frameworks */,
+				24A3E5A82EFFE759000D6F12 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				247D30922EF392A100BD6922 /* PBXTargetDependency */,
+				24A3E5B12EFFE759000D6F12 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				24A3E5AB2EFFE759000D6F12 /* SeatCodeTestUITests */,
 			);
 			name = SeatCodeTestUITests;
 			packageProductDependencies = (
 			);
 			productName = SeatCodeTestUITests;
-			productReference = 247D30902EF392A100BD6922 /* SeatCodeTestUITests.xctest */;
+			productReference = 24A3E5AA2EFFE759000D6F12 /* SeatCodeTestUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -179,7 +186,7 @@
 						CreatedOnToolsVersion = 26.0.1;
 						TestTargetID = 247D30782EF3929F00BD6922;
 					};
-					247D308F2EF392A100BD6922 = {
+					24A3E5A92EFFE759000D6F12 = {
 						CreatedOnToolsVersion = 26.0.1;
 						TestTargetID = 247D30782EF3929F00BD6922;
 					};
@@ -204,7 +211,7 @@
 			targets = (
 				247D30782EF3929F00BD6922 /* SeatCodeTest */,
 				247D30852EF392A100BD6922 /* SeatCodeTestTests */,
-				247D308F2EF392A100BD6922 /* SeatCodeTestUITests */,
+				24A3E5A92EFFE759000D6F12 /* SeatCodeTestUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -224,7 +231,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		247D308E2EF392A100BD6922 /* Resources */ = {
+		24A3E5A82EFFE759000D6F12 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -248,7 +255,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		247D308C2EF392A100BD6922 /* Sources */ = {
+		24A3E5A62EFFE759000D6F12 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -263,10 +270,10 @@
 			target = 247D30782EF3929F00BD6922 /* SeatCodeTest */;
 			targetProxy = 247D30872EF392A100BD6922 /* PBXContainerItemProxy */;
 		};
-		247D30922EF392A100BD6922 /* PBXTargetDependency */ = {
+		24A3E5B12EFFE759000D6F12 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 247D30782EF3929F00BD6922 /* SeatCodeTest */;
-			targetProxy = 247D30912EF392A100BD6922 /* PBXContainerItemProxy */;
+			targetProxy = 24A3E5B02EFFE759000D6F12 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -502,7 +509,7 @@
 			};
 			name = Release;
 		};
-		247D30A12EF392A200BD6922 /* Debug */ = {
+		24A3E5B32EFFE759000D6F12 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -522,7 +529,7 @@
 			};
 			name = Debug;
 		};
-		247D30A22EF392A200BD6922 /* Release */ = {
+		24A3E5B42EFFE759000D6F12 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -572,11 +579,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		247D30A02EF392A200BD6922 /* Build configuration list for PBXNativeTarget "SeatCodeTestUITests" */ = {
+		24A3E5B22EFFE759000D6F12 /* Build configuration list for PBXNativeTarget "SeatCodeTestUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				247D30A12EF392A200BD6922 /* Debug */,
-				247D30A22EF392A200BD6922 /* Release */,
+				24A3E5B32EFFE759000D6F12 /* Debug */,
+				24A3E5B42EFFE759000D6F12 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

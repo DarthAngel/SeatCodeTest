@@ -36,27 +36,35 @@ final class SeatCodeTestContactService: XCTestCase {
         UserDefaults.standard.synchronize()
         
         // Create fresh ContactService for each test
-        contactService = ContactService()
+        self.contactService = ContactService()
         
         // Verify we start with empty reports
-        if !contactService.reports.isEmpty {
-            print("Warning: ContactService has \(contactService.reports.count) reports on initialization")
+        if !self.contactService.reports.isEmpty {
+            print("Warning: ContactService has \(self.contactService.reports.count) reports on initialization")
             // Force clear if needed
-            while !contactService.reports.isEmpty {
-                contactService.deleteReport(at: 0)
+            while !self.contactService.reports.isEmpty {
+                self.contactService.deleteReport(at: 0)
             }
         }
         
-        XCTAssertTrue(contactService.reports.isEmpty, "ContactService should start with empty reports in test setup")
+        XCTAssertTrue(self.contactService.reports.isEmpty, "ContactService should start with empty reports in test setup")
     }
     
     override func tearDown() async throws {
         // Clear all data after each test to ensure clean state
-        contactService?.reports.removeAll()
+        if let contactService = contactService {
+            await MainActor.run {
+                contactService.reports.removeAll()
+            }
+        }
+        
         UserDefaults.standard.removeObject(forKey: "ContactReports")
         UserDefaults.standard.synchronize()
         
-        contactService = nil
+        await MainActor.run {
+            self.contactService = nil
+        }
+        
         try await super.tearDown()
     }
     

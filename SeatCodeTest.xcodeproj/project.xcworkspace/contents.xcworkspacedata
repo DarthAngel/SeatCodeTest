@@ -4,7 +4,8 @@
    <FileRef
       location = "self:">
    </FileRef>
-   <FileRef
-      location = "group:README.md">
-   </FileRef>
+   <FileSystemSynchronizedGroup
+      location = "group:SeatCodeTestUITests"
+      name = "SeatCodeTestUITests">
+   </FileSystemSynchronizedGroup>
 </Workspace>
