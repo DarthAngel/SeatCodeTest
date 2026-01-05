@@ -41,8 +41,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "247D30852EF392A100BD6922"
-               BuildableName = "SeatCodeTestTests.xctest"
-               BlueprintName = "SeatCodeTestTests"
+               BuildableName = "SeatCodeTestTests2.xctest"
+               BlueprintName = "SeatCodeTestTests2"
                ReferencedContainer = "container:SeatCodeTest.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -51,9 +51,20 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "247D308F2EF392A100BD6922"
+               BlueprintIdentifier = "24A3E5A92EFFE759000D6F12"
                BuildableName = "SeatCodeTestUITests.xctest"
                BlueprintName = "SeatCodeTestUITests"
+               ReferencedContainer = "container:SeatCodeTest.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "2443AEA02F0BFA6D000E5C7E"
+               BuildableName = "SeatCodeTestTests.xctest"
+               BlueprintName = "SeatCodeTestTests"
                ReferencedContainer = "container:SeatCodeTest.xcodeproj">
             </BuildableReference>
          </TestableReference>

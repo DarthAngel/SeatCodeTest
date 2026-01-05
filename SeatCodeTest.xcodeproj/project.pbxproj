@@ -11,7 +11,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		247D30872EF392A100BD6922 /* PBXContainerItemProxy */ = {
+		2443AEA52F0BFA6D000E5C7E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 247D30712EF3929F00BD6922 /* Project object */;
 			proxyType = 1;
@@ -28,14 +28,32 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2443AEA12F0BFA6D000E5C7E /* SeatCodeTestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SeatCodeTestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		247D30792EF3929F00BD6922 /* SeatCodeTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SeatCodeTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		247D30862EF392A100BD6922 /* SeatCodeTestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SeatCodeTestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		24A3E5AA2EFFE759000D6F12 /* SeatCodeTestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SeatCodeTestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		2443AE672F0BD2B1000E5C7E /* Exceptions for "SeatCodeTest" folder in "SeatCodeTest" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 247D30782EF3929F00BD6922 /* SeatCodeTest */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		2443AEA22F0BFA6D000E5C7E /* SeatCodeTestTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = SeatCodeTestTests;
+			sourceTree = "<group>";
+		};
 		247D307B2EF3929F00BD6922 /* SeatCodeTest */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				2443AE672F0BD2B1000E5C7E /* Exceptions for "SeatCodeTest" folder in "SeatCodeTest" target */,
+			);
 			path = SeatCodeTest;
 			sourceTree = "<group>";
 		};
@@ -49,21 +67,26 @@
 			path = SeatCodeTestUITests;
 			sourceTree = "<group>";
 		};
+		24BD46A82F0A8A5F009AB5C3 /* CarPlay */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CarPlay;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		2443AE9E2F0BFA6D000E5C7E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		247D30762EF3929F00BD6922 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				24A6631A2EF4D28600367ADF /* Polyline in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		247D30832EF392A100BD6922 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,7 +106,9 @@
 				247D307B2EF3929F00BD6922 /* SeatCodeTest */,
 				247D30892EF392A100BD6922 /* SeatCodeTestTests */,
 				24A3E5AB2EFFE759000D6F12 /* SeatCodeTestUITests */,
+				2443AEA22F0BFA6D000E5C7E /* SeatCodeTestTests */,
 				247D307A2EF3929F00BD6922 /* Products */,
+				24BD46A82F0A8A5F009AB5C3 /* CarPlay */,
 			);
 			sourceTree = "<group>";
 		};
@@ -91,8 +116,8 @@
 			isa = PBXGroup;
 			children = (
 				247D30792EF3929F00BD6922 /* SeatCodeTest.app */,
-				247D30862EF392A100BD6922 /* SeatCodeTestTests.xctest */,
 				24A3E5AA2EFFE759000D6F12 /* SeatCodeTestUITests.xctest */,
+				2443AEA12F0BFA6D000E5C7E /* SeatCodeTestTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -100,6 +125,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		2443AEA02F0BFA6D000E5C7E /* SeatCodeTestTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2443AEA72F0BFA6D000E5C7E /* Build configuration list for PBXNativeTarget "SeatCodeTestTests" */;
+			buildPhases = (
+				2443AE9D2F0BFA6D000E5C7E /* Sources */,
+				2443AE9E2F0BFA6D000E5C7E /* Frameworks */,
+				2443AE9F2F0BFA6D000E5C7E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2443AEA62F0BFA6D000E5C7E /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				2443AEA22F0BFA6D000E5C7E /* SeatCodeTestTests */,
+			);
+			name = SeatCodeTestTests;
+			packageProductDependencies = (
+			);
+			productName = SeatCodeTestTests;
+			productReference = 2443AEA12F0BFA6D000E5C7E /* SeatCodeTestTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		247D30782EF3929F00BD6922 /* SeatCodeTest */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 247D309A2EF392A200BD6922 /* Build configuration list for PBXNativeTarget "SeatCodeTest" */;
@@ -114,6 +162,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				247D307B2EF3929F00BD6922 /* SeatCodeTest */,
+				24BD46A82F0A8A5F009AB5C3 /* CarPlay */,
 			);
 			name = SeatCodeTest;
 			packageProductDependencies = (
@@ -122,29 +171,6 @@
 			productName = SeatCodeTest;
 			productReference = 247D30792EF3929F00BD6922 /* SeatCodeTest.app */;
 			productType = "com.apple.product-type.application";
-		};
-		247D30852EF392A100BD6922 /* SeatCodeTestTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 247D309D2EF392A200BD6922 /* Build configuration list for PBXNativeTarget "SeatCodeTestTests" */;
-			buildPhases = (
-				247D30822EF392A100BD6922 /* Sources */,
-				247D30832EF392A100BD6922 /* Frameworks */,
-				247D30842EF392A100BD6922 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				247D30882EF392A100BD6922 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				247D30892EF392A100BD6922 /* SeatCodeTestTests */,
-			);
-			name = SeatCodeTestTests;
-			packageProductDependencies = (
-			);
-			productName = SeatCodeTestTests;
-			productReference = 247D30862EF392A100BD6922 /* SeatCodeTestTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		24A3E5A92EFFE759000D6F12 /* SeatCodeTestUITests */ = {
 			isa = PBXNativeTarget;
@@ -179,12 +205,12 @@
 				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
-					247D30782EF3929F00BD6922 = {
-						CreatedOnToolsVersion = 26.0.1;
-					};
-					247D30852EF392A100BD6922 = {
+					2443AEA02F0BFA6D000E5C7E = {
 						CreatedOnToolsVersion = 26.0.1;
 						TestTargetID = 247D30782EF3929F00BD6922;
+					};
+					247D30782EF3929F00BD6922 = {
+						CreatedOnToolsVersion = 26.0.1;
 					};
 					24A3E5A92EFFE759000D6F12 = {
 						CreatedOnToolsVersion = 26.0.1;
@@ -210,21 +236,21 @@
 			projectRoot = "";
 			targets = (
 				247D30782EF3929F00BD6922 /* SeatCodeTest */,
-				247D30852EF392A100BD6922 /* SeatCodeTestTests */,
 				24A3E5A92EFFE759000D6F12 /* SeatCodeTestUITests */,
+				2443AEA02F0BFA6D000E5C7E /* SeatCodeTestTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		247D30772EF3929F00BD6922 /* Resources */ = {
+		2443AE9F2F0BFA6D000E5C7E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		247D30842EF392A100BD6922 /* Resources */ = {
+		247D30772EF3929F00BD6922 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -241,14 +267,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		247D30752EF3929F00BD6922 /* Sources */ = {
+		2443AE9D2F0BFA6D000E5C7E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		247D30822EF392A100BD6922 /* Sources */ = {
+		247D30752EF3929F00BD6922 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -265,10 +291,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		247D30882EF392A100BD6922 /* PBXTargetDependency */ = {
+		2443AEA62F0BFA6D000E5C7E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 247D30782EF3929F00BD6922 /* SeatCodeTest */;
-			targetProxy = 247D30872EF392A100BD6922 /* PBXContainerItemProxy */;
+			targetProxy = 2443AEA52F0BFA6D000E5C7E /* PBXContainerItemProxy */;
 		};
 		24A3E5B12EFFE759000D6F12 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -278,6 +304,50 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		2443AEA82F0BFA6D000E5C7E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CQLDM5Q7V2;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rpatec.SeatCodeTestTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SeatCodeTest.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SeatCodeTest";
+			};
+			name = Debug;
+		};
+		2443AEA92F0BFA6D000E5C7E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CQLDM5Q7V2;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rpatec.SeatCodeTestTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SeatCodeTest.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SeatCodeTest";
+			};
+			name = Release;
+		};
 		247D30982EF392A200BD6922 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -331,7 +401,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -389,7 +459,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -404,17 +474,24 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SeatCodeTest/SeatCodeTest.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = CQLDM5Q7V2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SeatCodeTest/Info.plist;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "If you want  to be able to use the internal GPS coordinates of this phone for centering the map on your location, click on 'Allow Once' or 'Allow While Using App'      NO DATA IS STORED OR SHARED";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = armv7;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -422,6 +499,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rpatec.SeatCodeTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
@@ -437,17 +515,24 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SeatCodeTest/SeatCodeTest.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = CQLDM5Q7V2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SeatCodeTest/Info.plist;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "If you want  to be able to use the internal GPS coordinates of this phone for centering the map on your location, click on 'Allow Once' or 'Allow While Using App'      NO DATA IS STORED OR SHARED";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = armv7;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -455,6 +540,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rpatec.SeatCodeTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
@@ -462,50 +548,6 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		247D309E2EF392A200BD6922 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = CQLDM5Q7V2;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.rpatec.SeatCodeTestTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SeatCodeTest.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SeatCodeTest";
-			};
-			name = Debug;
-		};
-		247D309F2EF392A200BD6922 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = CQLDM5Q7V2;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.rpatec.SeatCodeTestTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SeatCodeTest.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SeatCodeTest";
 			};
 			name = Release;
 		};
@@ -552,6 +594,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		2443AEA72F0BFA6D000E5C7E /* Build configuration list for PBXNativeTarget "SeatCodeTestTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2443AEA82F0BFA6D000E5C7E /* Debug */,
+				2443AEA92F0BFA6D000E5C7E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		247D30742EF3929F00BD6922 /* Build configuration list for PBXProject "SeatCodeTest" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -566,15 +617,6 @@
 			buildConfigurations = (
 				247D309B2EF392A200BD6922 /* Debug */,
 				247D309C2EF392A200BD6922 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		247D309D2EF392A200BD6922 /* Build configuration list for PBXNativeTarget "SeatCodeTestTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				247D309E2EF392A200BD6922 /* Debug */,
-				247D309F2EF392A200BD6922 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

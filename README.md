@@ -7,6 +7,7 @@ A modern iOS application built with SwiftUI that provides comprehensive trip man
 ### Core Functionality
 - **Trip Management**: View, track, and manage trips with different statuses (ongoing, scheduled, finalized, cancelled)
 - **Interactive Maps**: Real-time map visualization using MapKit with route polylines and stop markers
+- **CarPlay Integration**: Full CarPlay support with trip details, interactive maps, and navigation
 - **Location Services**: Comprehensive location tracking with proper permission handling
 - **Network Integration**: Fetch trip data and stop details from remote services
 - **Contact Support**: Built-in contact form for user support and feedback
@@ -16,6 +17,62 @@ A modern iOS application built with SwiftUI that provides comprehensive trip man
 - **Dynamic Updates**: Real-time updates using Combine framework and SwiftUI's observation system
 - **Responsive Design**: Adaptive layout that works across different iOS device sizes
 - **Popup Overlays**: Detailed stop information with elegant popup presentations
+- **CarPlay Interface**: Dedicated CarPlay templates for in-vehicle trip management
+
+##  CarPlay Integration
+
+### Features
+- **Trip List Display**: Browse all trips directly from the CarPlay interface with native list templates
+- **Trip Detail Views**: Comprehensive trip information including driver, status, timing, and route details
+- **Interactive Maps**: Full-featured CarPlay maps with navigation support and route visualization
+- **Stop Management**: View detailed stop information with passenger data and payment status
+- **Navigation Integration**: Direct integration with Apple Maps for turn-by-turn navigation
+- **Voice Control**: Full Siri integration for hands-free trip management
+
+### CarPlay Templates
+- **CPListTemplate**: For trip lists and detailed trip information
+- **CPMapTemplate**: Interactive maps with navigation buttons and route display
+- **CPInformationTemplate**: Detailed stop information and trip summaries
+- **CPTextButton**: Navigation and action buttons for user interactions
+
+### Safety Features
+- **Driver-Safe Interface**: All CarPlay interfaces are optimized for driver safety
+- **Voice Integration**: Hands-free operation through Siri voice commands
+- **Simplified Navigation**: Streamlined interface with minimal driver distraction
+- **Quick Actions**: One-tap access to navigation and trip details
+
+### CarPlay Architecture
+The CarPlay functionality is implemented through dedicated managers:
+
+#### CarPlaySceneDelegate
+- Manages CarPlay scene lifecycle and connection handling
+- Configures the CarPlay interface controller and root templates
+- Handles scene activation, deactivation, and disconnection
+
+#### CarPlayManager
+- Central coordinator for CarPlay functionality
+- Manages trip data and user interactions
+- Provides interface between CarPlay templates and app data
+- Handles navigation between different CarPlay screens
+
+#### CarPlayTripDetailManager
+- Specialized manager for individual trip details
+- Creates detailed trip information templates
+- Manages map display and navigation integration
+- Handles stop detail presentations and user interactions
+
+### Implementation Details
+```swift
+// CarPlay scene configuration
+func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+    guard let carPlayScene = scene as? CPTemplateApplicationScene else { return }
+    self.interfaceController = carPlayScene.interfaceController
+    
+    // Set up root template and navigation
+    let carPlayManager = CarPlayManager(interfaceController: interfaceController)
+    carPlayManager.setupRootTemplate()
+}
+```
 
 ##  Architecture
 
@@ -61,6 +118,7 @@ A modern iOS application built with SwiftUI that provides comprehensive trip man
 - **MapKit**: Native iOS mapping and location services
 - **CoreLocation**: Location permissions and GPS functionality
 - **Combine**: Reactive programming framework
+- **CarPlay**: In-vehicle interface framework
 - **Polyline**: Google polyline encoding/decoding support
 
 ### Frameworks Used
@@ -68,6 +126,7 @@ A modern iOS application built with SwiftUI that provides comprehensive trip man
 - Combine for reactive data flow
 - MapKit for mapping functionality
 - CoreLocation for location services
+- CarPlay for in-vehicle interface
 - Foundation for networking and data handling
 
 ##  Getting Started
@@ -80,6 +139,8 @@ A modern iOS application built with SwiftUI that provides comprehensive trip man
 
 ### Configuration
 - Ensure location permissions are properly configured in `Info.plist`
+- Configure CarPlay capabilities in App Target settings
+- Add CarPlay entitlements for vehicle integration
 - Configure network endpoints in `NetworkService.swift`
 - Set up proper app bundle identifier for device testing
 
@@ -87,8 +148,89 @@ A modern iOS application built with SwiftUI that provides comprehensive trip man
 The project includes comprehensive unit tests:
 - `SeatCodeTestLocationManager`: Location service testing
 - `SeatCodeTestTripManagerViewModel`: Core business logic testing
+- `CarPlayManagerTests`: CarPlay functionality testing
+- `CarPlayTripDetailManagerTests`: CarPlay trip detail testing
+- `CarPlaySceneDelegateTests`: CarPlay scene lifecycle testing
 
 Run tests using Xcode's Test Navigator or `⌘+U`.
+
+##  CarPlay Testing
+
+### CarPlay Simulator
+Test CarPlay functionality using Xcode's CarPlay simulator:
+
+1. **Enable CarPlay Simulator**:
+   ```bash
+   # In Xcode, go to Hardware > External Displays > CarPlay
+   # Or use Simulator menu: Device > External Displays > CarPlay
+   ```
+
+2. **Test CarPlay Features**:
+   - Trip list navigation and selection
+   - Trip detail views with all information sections
+   - Map display and navigation integration
+   - Stop detail popups and information display
+   - Back navigation and template transitions
+
+### CarPlay Unit Tests
+
+#### CarPlayManagerTests.swift
+Tests the main CarPlay coordinator:
+- **Template Creation**: Validates proper CarPlay template generation
+- **Data Integration**: Tests integration between trip data and CarPlay templates
+- **Navigation Flow**: Verifies template navigation and state management
+- **User Interactions**: Tests button handlers and user input processing
+- **Error Handling**: Validates proper error states and fallback behaviors
+
+#### CarPlayTripDetailManagerTests.swift
+Tests detailed trip presentation in CarPlay:
+- **Trip Information Display**: Tests complete trip data presentation
+- **Stop Management**: Validates stop detail creation and display
+- **Map Integration**: Tests CarPlay map template creation and interaction
+- **Navigation Actions**: Verifies navigation button functionality
+- **Template Structure**: Tests proper section organization and data binding
+
+#### CarPlaySceneDelegateTests.swift
+Tests CarPlay scene lifecycle management:
+- **Scene Connection**: Tests CarPlay scene setup and configuration
+- **Interface Controller**: Validates proper interface controller assignment
+- **Scene Lifecycle**: Tests scene activation, deactivation, and cleanup
+- **Template Management**: Verifies root template setup and navigation
+
+### Testing CarPlay Templates
+
+```swift
+func testCreateDetailTemplate() throws {
+    let trip = createMockTrip()
+    let manager = CarPlayTripDetailManager(
+        trip: trip,
+        viewModel: mockViewModel,
+        interfaceController: mockInterfaceController
+    )
+    
+    let template = manager.createDetailTemplate()
+    
+    XCTAssertEqual(template.title, trip.description)
+    XCTAssertFalse(template.sections.isEmpty)
+    XCTAssertEqual(template.trailingNavigationBarButtons?.count, 1)
+}
+```
+
+### Running CarPlay Tests
+
+```bash
+# Test CarPlay manager
+xcodebuild test -scheme SeatCode -destination 'platform=iOS Simulator,name=iPhone 15' -only-testing:SeatCodeTestTests/CarPlayManagerTests
+
+# Test CarPlay trip details
+xcodebuild test -scheme SeatCode -destination 'platform=iOS Simulator,name=iPhone 15' -only-testing:SeatCodeTestTests/CarPlayTripDetailManagerTests
+
+# Test CarPlay scene delegate
+xcodebuild test -scheme SeatCode -destination 'platform=iOS Simulator,name=iPhone 15' -only-testing:SeatCodeTestTests/CarPlaySceneDelegateTests
+
+# All CarPlay tests
+xcodebuild test -scheme SeatCode -destination 'platform=iOS Simulator,name=iPhone 15' -only-testing:SeatCodeTestTests/CarPlay*
+```
 
 ##  Location Services
 
@@ -137,6 +279,8 @@ Run tests using Xcode's Test Navigator or `⌘+U`.
 - System notification integration
 - Adaptive layout for different screen sizes
 - Native map integration with system styles
+- CarPlay integration with vehicle systems
+- Siri voice control support
 
 ### Accessibility
 - VoiceOver support considerations
@@ -457,6 +601,6 @@ This project is created as a coding test for SeatCode. All rights reserved.
 ##  Author
 
 **Angel Docampo**
-- Created: December 2025
+- Created: January 2026
 
 
