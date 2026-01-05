@@ -370,84 +370,9 @@ The unit tests provide comprehensive coverage of:
 
 ## Testing
 
-The project includes both unit tests and UI tests:
-- **Unit Tests**: Test business logic and data models (see Unit Testing section above)
-- **UI Tests**: Test user interface interactions and workflows (see UI Testing section above)
-
 Run tests using Xcode's Test Navigator or via command line with `xcodebuild`.
 
 
-## UI Testing
-
-The project includes comprehensive UI tests located in the `SeatCodeTestUITests` folder. The test suite covers the following areas:
-
-### Test Files
-
-#### 1. MainViewUITests.swift
-Tests the main application interface and navigation components:
-- **Main View Loading**: Verifies the Trip Manager view loads correctly
-- **Navigation Bar Elements**: Tests the presence of navigation controls and toolbar buttons
-- **Map View Integration**: Validates map view presence and functionality
-- **User Interface Responsiveness**: Ensures UI elements respond appropriately
-
-#### 2. ContactFormViewUITests.swift
-Tests the contact form functionality for issue reporting:
-- **Form Navigation**: Tests opening the contact form from the main view
-- **Form Cancellation**: Verifies users can cancel form submission
-- **Form Validation**: Tests input validation and error handling
-- **Form Submission**: Validates successful report submission workflow
-- **Navigation Flow**: Ensures proper navigation between form states
-
-#### 3. ListViewUITests.swift (ReportsListViewUITests)
-Tests the reports list view and report management:
-- **Navigation to Reports**: Tests accessing the reports list from the contact form
-- **Reports Display**: Verifies proper display of submitted reports
-- **List Dismissal**: Tests dismissing the reports list view
-- **Report Management**: Validates report deletion and organization
-- **Data Persistence**: Ensures reports are properly saved and loaded
-
-#### 4. StopDetailPopUpUITests.swift
-Tests the stop detail popup functionality:
-- **Popup Display**: Tests triggering and displaying stop detail popups
-- **Data Validation**: Verifies popup content accuracy
-- **User Interaction**: Tests popup interaction and dismissal
-- **Map Integration**: Validates popup integration with map interactions
-- **Information Display**: Ensures passenger and stop information is correctly shown
-
-### Running UI Tests
-
-To run the UI tests:
-
-1. **Individual Test Classes**: 
-   ```bash
-   xcodebuild test -scheme SeatCode -destination 'platform=iOS Simulator,name=iPhone 15' -only-testing:SeatCodeTestUITests/MainViewUITests
-   ```
-
-2. **All UI Tests**:
-   ```bash
-   xcodebuild test -scheme SeatCode -destination 'platform=iOS Simulator,name=iPhone 15' -only-testing:SeatCodeTestUITests
-   ```
-
-3. **Via Xcode**: 
-   - Select the test target in the Test Navigator
-   - Use `Cmd+U` to run all tests or click the diamond next to specific test methods
-
-### Test Configuration
-
-The UI tests are configured with:
-- **Automatic App Launch**: Each test class launches the app fresh
-- **Failure Continuation**: Tests stop on first failure for faster debugging
-- **Timeout Handling**: Appropriate wait times for UI elements to appear
-- **Clean State**: Each test starts with a clean application state
-
-### Best Practices
-
-The UI tests follow these patterns:
-- **Page Object Model**: Encapsulated UI interactions for maintainability
-- **Explicit Waits**: Using `waitForExistence(timeout:)` for reliable timing
-- **Descriptive Test Names**: Clear test method names describing the scenario
-- **Setup/Teardown**: Proper test lifecycle management
-- **Accessibility Labels**: Leveraging accessibility identifiers for stable element selection
 
 
 ##  License
