@@ -44,22 +44,12 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		2443AEA22F0BFA6D000E5C7E /* SeatCodeTestTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = SeatCodeTestTests;
-			sourceTree = "<group>";
-		};
 		247D307B2EF3929F00BD6922 /* SeatCodeTest */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				2443AE672F0BD2B1000E5C7E /* Exceptions for "SeatCodeTest" folder in "SeatCodeTest" target */,
 			);
 			path = SeatCodeTest;
-			sourceTree = "<group>";
-		};
-		247D30892EF392A100BD6922 /* SeatCodeTestTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = SeatCodeTestTests;
 			sourceTree = "<group>";
 		};
 		24A3E5AB2EFFE759000D6F12 /* SeatCodeTestUITests */ = {
@@ -70,11 +60,6 @@
 		24BD46A82F0A8A5F009AB5C3 /* CarPlay */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = CarPlay;
-			sourceTree = "<group>";
-		};
-		24DE4CF52F0C5F4400A06195 /* SeatCodeTestTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = SeatCodeTestTests;
 			sourceTree = "<group>";
 		};
 		24DE4D0A2F0C5F7A00A06195 /* SeatCodeTestTests */ = {
@@ -114,10 +99,7 @@
 			isa = PBXGroup;
 			children = (
 				247D307B2EF3929F00BD6922 /* SeatCodeTest */,
-				247D30892EF392A100BD6922 /* SeatCodeTestTests */,
 				24A3E5AB2EFFE759000D6F12 /* SeatCodeTestUITests */,
-				2443AEA22F0BFA6D000E5C7E /* SeatCodeTestTests */,
-				24DE4CF52F0C5F4400A06195 /* SeatCodeTestTests */,
 				24DE4D0A2F0C5F7A00A06195 /* SeatCodeTestTests */,
 				247D307A2EF3929F00BD6922 /* Products */,
 				24BD46A82F0A8A5F009AB5C3 /* CarPlay */,
