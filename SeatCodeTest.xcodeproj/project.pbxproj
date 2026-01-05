@@ -18,30 +18,17 @@
 			remoteGlobalIDString = 247D30782EF3929F00BD6922;
 			remoteInfo = SeatCodeTest;
 		};
-		24A3E5B02EFFE759000D6F12 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 247D30712EF3929F00BD6922 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 247D30782EF3929F00BD6922;
-			remoteInfo = SeatCodeTest;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		247D30792EF3929F00BD6922 /* SeatCodeTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SeatCodeTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		248D5C962F0BFBEF00E7BAE5 /* SeatCodeTestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SeatCodeTestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		24A3E5AA2EFFE759000D6F12 /* SeatCodeTestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SeatCodeTestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		247D307B2EF3929F00BD6922 /* SeatCodeTest */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = SeatCodeTest;
-			sourceTree = "<group>";
-		};
-		247D30892EF392A100BD6922 /* SeatCodeTestTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = SeatCodeTestTests;
 			sourceTree = "<group>";
 		};
 		248D5C972F0BFBEF00E7BAE5 /* SeatCodeTestTests */ = {
@@ -67,13 +54,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		24A3E5A72EFFE759000D6F12 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -81,7 +61,6 @@
 			isa = PBXGroup;
 			children = (
 				247D307B2EF3929F00BD6922 /* SeatCodeTest */,
-				247D30892EF392A100BD6922 /* SeatCodeTestTests */,
 				248D5C972F0BFBEF00E7BAE5 /* SeatCodeTestTests */,
 				247D307A2EF3929F00BD6922 /* Products */,
 			);
@@ -91,7 +70,6 @@
 			isa = PBXGroup;
 			children = (
 				247D30792EF3929F00BD6922 /* SeatCodeTest.app */,
-				24A3E5AA2EFFE759000D6F12 /* SeatCodeTestUITests.xctest */,
 				248D5C962F0BFBEF00E7BAE5 /* SeatCodeTestTests.xctest */,
 			);
 			name = Products;
@@ -146,26 +124,6 @@
 			productReference = 248D5C962F0BFBEF00E7BAE5 /* SeatCodeTestTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		24A3E5A92EFFE759000D6F12 /* SeatCodeTestUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 24A3E5B22EFFE759000D6F12 /* Build configuration list for PBXNativeTarget "SeatCodeTestUITests" */;
-			buildPhases = (
-				24A3E5A62EFFE759000D6F12 /* Sources */,
-				24A3E5A72EFFE759000D6F12 /* Frameworks */,
-				24A3E5A82EFFE759000D6F12 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				24A3E5B12EFFE759000D6F12 /* PBXTargetDependency */,
-			);
-			name = SeatCodeTestUITests;
-			packageProductDependencies = (
-			);
-			productName = SeatCodeTestUITests;
-			productReference = 24A3E5AA2EFFE759000D6F12 /* SeatCodeTestUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -180,10 +138,6 @@
 						CreatedOnToolsVersion = 26.0.1;
 					};
 					248D5C952F0BFBEF00E7BAE5 = {
-						CreatedOnToolsVersion = 26.0.1;
-						TestTargetID = 247D30782EF3929F00BD6922;
-					};
-					24A3E5A92EFFE759000D6F12 = {
 						CreatedOnToolsVersion = 26.0.1;
 						TestTargetID = 247D30782EF3929F00BD6922;
 					};
@@ -207,7 +161,6 @@
 			projectRoot = "";
 			targets = (
 				247D30782EF3929F00BD6922 /* SeatCodeTest */,
-				24A3E5A92EFFE759000D6F12 /* SeatCodeTestUITests */,
 				248D5C952F0BFBEF00E7BAE5 /* SeatCodeTestTests */,
 			);
 		};
@@ -222,13 +175,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		248D5C942F0BFBEF00E7BAE5 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		24A3E5A82EFFE759000D6F12 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -252,13 +198,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		24A3E5A62EFFE759000D6F12 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -266,11 +205,6 @@
 			isa = PBXTargetDependency;
 			target = 247D30782EF3929F00BD6922 /* SeatCodeTest */;
 			targetProxy = 248D5C9A2F0BFBEF00E7BAE5 /* PBXContainerItemProxy */;
-		};
-		24A3E5B12EFFE759000D6F12 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 247D30782EF3929F00BD6922 /* SeatCodeTest */;
-			targetProxy = 24A3E5B02EFFE759000D6F12 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -504,46 +438,6 @@
 			};
 			name = Release;
 		};
-		24A3E5B32EFFE759000D6F12 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = CQLDM5Q7V2;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.rpatec.SeatCodeTestUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = SeatCodeTest;
-			};
-			name = Debug;
-		};
-		24A3E5B42EFFE759000D6F12 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = CQLDM5Q7V2;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.rpatec.SeatCodeTestUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = SeatCodeTest;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -570,15 +464,6 @@
 			buildConfigurations = (
 				248D5C9D2F0BFBEF00E7BAE5 /* Debug */,
 				248D5C9E2F0BFBEF00E7BAE5 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		24A3E5B22EFFE759000D6F12 /* Build configuration list for PBXNativeTarget "SeatCodeTestUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				24A3E5B32EFFE759000D6F12 /* Debug */,
-				24A3E5B42EFFE759000D6F12 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
