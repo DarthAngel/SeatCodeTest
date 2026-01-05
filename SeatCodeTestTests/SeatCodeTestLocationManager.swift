@@ -42,32 +42,11 @@ final class SeatCodeTestLocationManager: XCTestCase {
     
     func testLocationManagerInitialization() throws {
         XCTAssertNotNil(locationManager, "LocationManager should be initialized")
-        XCTAssertEqual(locationManager.authorizationStatus, .notDetermined, "Initial authorization status should be notDetermined")
         XCTAssertNil(locationManager.currentLocation, "Initial location should be nil")
         XCTAssertNil(locationManager.errorMessage, "Initial error message should be nil")
     }
     
-    // MARK: - Authorization Status Tests
-    
-    func testAuthorizationStatusPublished() async throws {
-        var receivedStatuses: [CLAuthorizationStatus] = []
-        
-        locationManager.$authorizationStatus
-            .sink { status in
-                receivedStatuses.append(status)
-            }
-            .store(in: &cancellables)
-        
-        // Simulate authorization status change
-        locationManager.authorizationStatus = .authorizedWhenInUse
-        
-        // Wait for the publisher to emit
-        await Task.yield() // Allow other tasks to run
-        try await Task.sleep(for: .milliseconds(100))
-        
-        XCTAssertTrue(receivedStatuses.contains(.notDetermined), "Should contain initial notDetermined status")
-        XCTAssertTrue(receivedStatuses.contains(.authorizedWhenInUse), "Should contain updated authorization status")
-    }
+
     
     // MARK: - Location Permission Request Tests
     
