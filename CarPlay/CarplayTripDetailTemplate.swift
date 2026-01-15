@@ -11,7 +11,7 @@ import MapKit
 import CoreLocation
 
 @MainActor
-class CarPlayTripDetailTemplate {
+class CarPlayTripDetailTemplate: NSObject, CPMapTemplateDelegate {
     
     let trip: Trip
     let viewModel: TripManagerViewModel
@@ -44,6 +44,7 @@ class CarPlayTripDetailTemplate {
         
         // Add action buttons
         let showOnMapButton = CPBarButton(title: "Show on Map") { [weak self] _ in
+            print("Show on Map button tapped")
             self?.showTripOnMap()
         }
         
@@ -101,6 +102,7 @@ class CarPlayTripDetailTemplate {
         )
         
         routeItem.handler = { [weak self] _, completion in
+            print("View Route item tapped")
             self?.showRouteOnMap()
             completion()
         }
@@ -117,6 +119,7 @@ class CarPlayTripDetailTemplate {
             )
             
             item.handler = { [weak self] _, completion in
+                print("Stop \(index + 1) tapped")
                 self?.showStopDetail(stopId: index + 1)
                 completion()
             }
@@ -128,82 +131,167 @@ class CarPlayTripDetailTemplate {
     }
     
     private func showTripOnMap() {
+        print("showTripOnMap called")
+        
+        guard let interfaceController = interfaceController else {
+            print("Error: interfaceController is nil")
+            return
+        }
+        
+        print("Interface controller available, creating map template")
+        
         // Create a map template focused on this trip
         let mapTemplate = CPMapTemplate()
         
-        // Create MKMapItem for navigation
-        var mapItems: [MKMapItem] = []
+        // Set up the map delegate
+        mapTemplate.mapDelegate = self
         
-        // Origin
-        let originMapItem = MKMapItem(placemark: MKPlacemark(coordinate: trip.origin.point.coordinate))
-        originMapItem.name = "Origin: \(trip.origin.address)"
-        mapItems.append(originMapItem)
+        // Add navigation and route buttons
+        var trailingButtons: [CPBarButton] = []
         
-        // Destination
-        let destinationMapItem = MKMapItem(placemark: MKPlacemark(coordinate: trip.destination.point.coordinate))
-        destinationMapItem.name = "Destination: \(trip.destination.address)"
-        mapItems.append(destinationMapItem)
+        // Route button
+        let routeButton = CPBarButton(title: "Route") { [weak self] _ in
+            self?.showRouteOptions()
+        }
+        trailingButtons.append(routeButton)
         
-        // Add stops
-        for (index, stop) in trip.stops.enumerated() {
-            if let coordinate = stop.coordinate {
-                let stopMapItem = MKMapItem(placemark: MKPlacemark(coordinate: coordinate))
-                stopMapItem.name = "Stop \(index + 1)"
-                mapItems.append(stopMapItem)
-            }
+        // Navigate button
+        let navigateButton = CPBarButton(title: "Navigate") { [weak self] _ in
+            self?.startNavigation()
+        }
+        trailingButtons.append(navigateButton)
+        
+        mapTemplate.trailingNavigationBarButtons = trailingButtons
+        
+        // Add map buttons for quick actions
+        let centerButton = CPMapButton { [weak self] _ in
+            // Center on trip route
+            print("Center button tapped")
+        }
+        if let centerImage = UIImage(systemName: "scope") {
+            centerButton.image = centerImage
         }
         
-        // Calculate region to show all points
-        let coordinates = mapItems.compactMap { $0.placemark.coordinate }
-        let region = regionToFit(coordinates: coordinates)
-        
-        // Create annotations for the map items
-        var annotations: [MKAnnotation] = []
-        for mapItem in mapItems {
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = mapItem.placemark.coordinate
-            annotation.title = mapItem.name
-            annotations.append(annotation)
+        let zoomButton = CPMapButton { [weak self] _ in
+            // Zoom to fit trip
+            print("Zoom button tapped")
+        }
+        if let zoomImage = UIImage(systemName: "plus.magnifyingglass") {
+            zoomButton.image = zoomImage
         }
         
-        // Set the map region and annotations will be added when the template is presented
-        
-        // Add a trip overview button that shows route options
-        if mapItems.count >= 2 {
-            let routeButton = CPBarButton(title: "Route") { [weak self] _ in
-                self?.showRouteOptions(from: mapItems.first!, to: mapItems.last!)
-            }
-            mapTemplate.trailingNavigationBarButtons = [routeButton]
-        }
+        mapTemplate.mapButtons = [centerButton, zoomButton]
         
         // Push the map template
-        interfaceController?.pushTemplate(mapTemplate, animated: true) { (success, error) in
+        print("Pushing map template")
+        interfaceController.pushTemplate(mapTemplate, animated: true) { (success, error) in
             if let error = error {
                 print("Error pushing map template: \(error)")
+            } else if success {
+                print("Successfully presented trip map")
+            } else {
+                print("Failed to push map template without specific error")
             }
         }
     }
     
-    private func showRouteOptions(from origin: MKMapItem, to destination: MKMapItem) {
-        // Create an action sheet template for route options
-        let routeAction = CPAlertAction(title: "Get Directions", style: .default) { _ in
-            // Open in Maps app for navigation
-            MKMapItem.openMaps(with: [origin, destination], launchOptions: [
-                MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving
-            ])
+    private func showRouteOptions() {
+        guard let interfaceController = interfaceController else {
+            print("Error: interfaceController is nil")
+            return
+        }
+        
+        // Create route options for the entire trip
+        let routeAction = CPAlertAction(title: "Get Directions", style: .default) { [weak self] _ in
+            self?.startNavigation()
+        }
+        
+        let showOverviewAction = CPAlertAction(title: "Show Route Overview", style: .default) { [weak self] _ in
+            self?.showRouteOverview()
         }
         
         let cancelAction = CPAlertAction(title: "Cancel", style: .cancel) { _ in
             // Do nothing
         }
         
-        let alert = CPActionSheetTemplate(title: "Route Options", message: "Choose an option for this route", actions: [routeAction, cancelAction])
+        let alert = CPActionSheetTemplate(
+            title: "Route Options", 
+            message: "Choose an option for this trip route", 
+            actions: [routeAction, showOverviewAction, cancelAction]
+        )
         
-        interfaceController?.presentTemplate(alert, animated: true, completion: { (success, error) in
+        interfaceController.presentTemplate(alert, animated: true) { (success, error) in
             if let error = error {
                 print("Error showing route options: \(error)")
             }
-        })
+        }
+    }
+    
+    private func startNavigation() {
+        // Open in Maps app for navigation to destination
+        let destinationMapItem = MKMapItem(placemark: MKPlacemark(coordinate: trip.destination.point.coordinate))
+        destinationMapItem.name = trip.destination.address
+        
+        let originMapItem = MKMapItem(placemark: MKPlacemark(coordinate: trip.origin.point.coordinate))
+        originMapItem.name = trip.origin.address
+        
+        MKMapItem.openMaps(with: [originMapItem, destinationMapItem], launchOptions: [
+            MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving,
+            MKLaunchOptionsShowsTrafficKey: true
+        ])
+    }
+    
+    private func showRouteOverview() {
+        guard let interfaceController = interfaceController else {
+            print("Error: interfaceController is nil")
+            return
+        }
+        
+        // Create a list template showing the route breakdown
+        let routeTemplate = CPListTemplate(title: "Route Overview", sections: [])
+        
+        var routeItems: [CPListItem] = []
+        
+        // Origin
+        let originItem = CPListItem(
+            text: "Start: \(trip.origin.address)",
+            detailText: "Trip origin",
+            image: UIImage(systemName: "location.circle.fill")
+        )
+        routeItems.append(originItem)
+        
+        // Stops
+        for (index, stop) in trip.stops.enumerated() {
+            let stopItem = CPListItem(
+                text: "Stop \(index + 1)",
+                detailText: "Intermediate stop",
+                image: UIImage(systemName: "mappin.circle.fill")
+            )
+            
+            stopItem.handler = { [weak self] _, completion in
+                self?.showStopDetail(stopId: index + 1)
+                completion()
+            }
+            
+            routeItems.append(stopItem)
+        }
+        
+        // Destination
+        let destinationItem = CPListItem(
+            text: "End: \(trip.destination.address)",
+            detailText: "Trip destination",
+            image: UIImage(systemName: "flag.fill")
+        )
+        routeItems.append(destinationItem)
+        
+        let routeSection = CPListSection(items: routeItems, header: "Route Sequence", sectionIndexTitle: nil)
+        routeTemplate.updateSections([routeSection])
+        
+        interfaceController.pushTemplate(routeTemplate, animated: true) { (success, error) in
+            if let error = error {
+                print("Error pushing route overview: \(error)")
+            }
+        }
     }
     
 
@@ -213,24 +301,71 @@ class CarPlayTripDetailTemplate {
     }
     
     private func showStopDetail(stopId: Int) {
+        print("showStopDetail called for stop \(stopId)")
+        
+        guard let interfaceController = interfaceController else {
+            print("Error: interfaceController is nil")
+            return
+        }
+        
+        // Ensure we have a valid stop index
+        guard stopId > 0 && stopId <= trip.stops.count else {
+            print("Error: Invalid stop ID \(stopId), trip has \(trip.stops.count) stops")
+            showInvalidStopError()
+            return
+        }
+        
+        print("Valid stop ID, refreshing stop details")
+        
         // Get stop details and show them
         Task {
             await viewModel.refreshStops()
             
             let tripStopDetails = viewModel.stopDetails.filter { $0.tripId == trip.id }
+            print("Found \(tripStopDetails.count) stop details for trip \(trip.id)")
             
             let stopDetailTemplate: CPListTemplate
             
-            if let stopDetail = tripStopDetails.first(where: { _ in tripStopDetails.count >= stopId }) {
+            // Find the specific stop detail by matching the stop order
+            if tripStopDetails.count >= stopId,
+               let stopDetail = tripStopDetails[safe: stopId - 1] {
+                print("Creating stop detail template with data")
                 stopDetailTemplate = createStopDetailTemplate(stopDetail: stopDetail, stopNumber: stopId)
             } else {
+                print("Creating empty stop detail template")
                 stopDetailTemplate = createEmptyStopDetailTemplate(stopNumber: stopId)
             }
             
-            interfaceController?.pushTemplate(stopDetailTemplate, animated: true) { (success, error) in
+            interfaceController.pushTemplate(stopDetailTemplate, animated: true) { (success, error) in
                 if let error = error {
                     print("Error pushing stop detail template: \(error)")
+                } else if success {
+                    print("Successfully showed stop \(stopId) details")
+                } else {
+                    print("Failed to push stop detail template without specific error")
                 }
+            }
+        }
+    }
+    
+    private func showInvalidStopError() {
+        guard let interfaceController = interfaceController else {
+            print("Error: interfaceController is nil when showing invalid stop error")
+            return
+        }
+        
+        let errorTemplate = CPAlertTemplate(
+            titleVariants: ["Invalid Stop"],
+            actions: [
+                CPAlertAction(title: "OK", style: .default) { _ in
+                    // Do nothing, just dismiss
+                }
+            ]
+        )
+        
+        interfaceController.presentTemplate(errorTemplate, animated: true) { (success, error) in
+            if let error = error {
+                print("Error showing invalid stop error: \(error)")
             }
         }
     }
@@ -302,5 +437,55 @@ class CarPlayTripDetailTemplate {
         )
         
         return MKCoordinateRegion(center: center, span: span)
+    }
+    
+    // MARK: - Map Configuration
+    
+    private func configureMapTemplate(_ mapTemplate: CPMapTemplate, with mapItems: [MKMapItem], region: MKCoordinateRegion) {
+        // The map view will be available after the template is presented
+        // We need to use CPMapTemplate delegate methods to configure it
+    }
+    
+    // MARK: - CPMapTemplateDelegate
+    
+    func mapTemplate(_ mapTemplate: CPMapTemplate, selectedPreviewFor trip: CPTrip, using routeChoice: CPRouteChoice) {
+        // Handle route preview selection
+    }
+    
+    func mapTemplate(_ mapTemplate: CPMapTemplate, startedTrip trip: CPTrip, using routeChoice: CPRouteChoice) {
+        // Handle trip start if needed
+    }
+    
+    func mapTemplate(_ mapTemplate: CPMapTemplate, displayStyleFor maneuver: CPManeuver) -> CPManeuverDisplayStyle {
+        return .leadingSymbol
+    }
+    
+    func mapTemplate(_ mapTemplate: CPMapTemplate, shouldUpdateNotificationFor maneuver: CPManeuver, with travelEstimates: CPTravelEstimates) -> Bool {
+        return true
+    }
+    
+    func mapTemplateDidEndNavigation(_ mapTemplate: CPMapTemplate) {
+        // Handle navigation end
+    }
+    
+    func mapTemplate(_ mapTemplate: CPMapTemplate, willShow panDirection: CPMapTemplate.PanDirection, for maneuver: CPManeuver) {
+        // Handle pan direction display
+    }
+    
+    func mapTemplate(_ mapTemplate: CPMapTemplate, panWith direction: CPMapTemplate.PanDirection) {
+        // Handle map panning
+    }
+    
+    func mapTemplate(_ mapTemplate: CPMapTemplate, didSelectPointOfInterest pointOfInterest: CPPointOfInterest) {
+        // Handle POI selection - this would be called if POIs were set up
+        print("POI selected: \(pointOfInterest.title ?? "Unknown")")
+    }
+
+}
+
+// MARK: - Array Extension for Safe Access
+private extension Array {
+    subscript(safe index: Index) -> Element? {
+        return indices.contains(index) ? self[index] : nil
     }
 }

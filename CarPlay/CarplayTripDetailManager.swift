@@ -39,11 +39,11 @@ class CarPlayTripDetailManager {
         detailTemplate.updateSections(sections)
         
         // Add action buttons
-        let showOnMapButton = CPBarButton(title: "Show on Map") { [weak self] _ in
-            self?.showTripOnMap()
-        }
+//        let showOnMapButton = CPBarButton(title: "Show on Map") { [weak self] _ in
+//            self?.showTripOnMap()
+//        }
         
-        detailTemplate.trailingNavigationBarButtons = [showOnMapButton]
+//        detailTemplate.trailingNavigationBarButtons = [showOnMapButton]
         
         return detailTemplate
     }
@@ -98,6 +98,13 @@ class CarPlayTripDetailManager {
     private func showTripOnMap() {
         print("🗺️ showTripOnMap called")
         
+        // Check template hierarchy depth before proceeding
+        if let templates = interfaceController?.templates, templates.count >= 4 {
+            print("Template hierarchy limit approaching, showing map fallback")
+            showMapFallback()
+            return
+        }
+        
         // Debug: Print trip coordinates to verify they exist
         let originCoord = trip.origin.point.coordinate
         let destCoord = trip.destination.point.coordinate
@@ -138,7 +145,7 @@ class CarPlayTripDetailManager {
         }
         mapTemplate.leadingNavigationBarButtons = [backButton]
         
-        // Add info button for trip details
+        // Add info button for trip details (now uses alert instead of pushing template)
         let infoButton = CPBarButton(title: "Info") { [weak self] _ in
             print("ℹ️ Map info button tapped")
             self?.showTripInfoFromMap()
@@ -164,24 +171,19 @@ class CarPlayTripDetailManager {
     }
     
     private func showTripInfoFromMap() {
-        let infoTemplate = CPInformationTemplate(
-            title: "Trip Details",
-            layout: .leading,
-            items: [
-                CPInformationItem(title: "From", detail: trip.origin.address),
-                CPInformationItem(title: "To", detail: trip.destination.address),
-                CPInformationItem(title: "Driver", detail: trip.driverName),
-                CPInformationItem(title: "Status", detail: trip.statusDisplayTextForCarPlay),
-                CPInformationItem(title: "Stops", detail: "\(trip.stops.count) stops")
-            ],
-            actions: [
-                CPTextButton(title: "Start Navigation", textStyle: .confirm) { [weak self] _ in
-                    self?.startNavigation()
-                }
-            ]
-        )
+        // Instead of pushing another template, show a CarPlay-friendly alert
+        // CarPlay has strict hierarchy limits, so we avoid pushing more templates
+        let alert = CPAlertTemplate(titleVariants: ["Trip Info"], actions: [
+            CPAlertAction(title: "From: \(trip.origin.address)", style: .default) { _ in },
+            CPAlertAction(title: "To: \(trip.destination.address)", style: .default) { _ in },
+            CPAlertAction(title: "Driver: \(trip.driverName)", style: .default) { _ in },
+            CPAlertAction(title: "Navigate", style: .default) { [weak self] _ in
+                self?.startNavigation()
+            },
+            CPAlertAction(title: "Close", style: .cancel) { _ in }
+        ])
         
-        interfaceController?.pushTemplate(infoTemplate, animated: true, completion: nil)
+        interfaceController?.presentTemplate(alert, animated: true, completion: nil)
     }
     
     private func showMapFallback() {
@@ -225,6 +227,13 @@ class CarPlayTripDetailManager {
     }
     
     private func showStopDetail(stopId: Int) {
+        // Check template hierarchy depth before proceeding
+        if let templates = interfaceController?.templates, templates.count >= 4 {
+            print("Template hierarchy limit approaching, showing stop info via alert")
+            showStopInfoAlert(stopId: stopId)
+            return
+        }
+        
         Task {
             await viewModel.refreshStops()
             
@@ -239,6 +248,34 @@ class CarPlayTripDetailManager {
             }
             
             interfaceController?.pushTemplate(stopDetailTemplate, animated: true, completion: nil)
+        }
+    }
+    
+    private func showStopInfoAlert(stopId: Int) {
+        Task {
+            await viewModel.refreshStops()
+            
+            let tripStopDetails = viewModel.stopDetails.filter { $0.tripId == trip.id }
+            
+            var actions: [CPAlertAction] = []
+            
+            if let stopDetail = tripStopDetails.first(where: { _ in tripStopDetails.count >= stopId }) {
+                actions = [
+                    CPAlertAction(title: "Stop \(stopId)", style: .default) { _ in },
+                    CPAlertAction(title: "Passenger: \(stopDetail.userName)", style: .default) { _ in },
+                    CPAlertAction(title: "Address: \(stopDetail.address)", style: .default) { _ in },
+                    CPAlertAction(title: "Close", style: .cancel) { _ in }
+                ]
+            } else {
+                actions = [
+                    CPAlertAction(title: "Stop \(stopId)", style: .default) { _ in },
+                    CPAlertAction(title: "No details available", style: .default) { _ in },
+                    CPAlertAction(title: "Close", style: .cancel) { _ in }
+                ]
+            }
+            
+            let alert = CPAlertTemplate(titleVariants: ["Stop Details"], actions: actions)
+            interfaceController?.presentTemplate(alert, animated: true, completion: nil)
         }
     }
     

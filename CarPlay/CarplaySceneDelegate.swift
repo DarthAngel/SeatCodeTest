@@ -67,7 +67,7 @@ class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
         
         // Refresh data when returning to foreground
         if let rootTemplate = interfaceController?.rootTemplate as? CPTabBarTemplate {
-            // Trigger data refresh on the active template
+            // Trigger data refresh on the tab bar template
             setupInitialTemplate()
         }
     }
@@ -95,7 +95,7 @@ class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
             if let error = error {
                 print("Error setting root template: \(error)")
             } else {
-                print("Successfully set root template")
+                print("Successfully set tab bar root template")
             }
         }
     }

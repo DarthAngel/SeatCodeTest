@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 // MARK: - Extensions for String Date Formatting
 extension String {
@@ -68,6 +69,11 @@ extension Trip {
         case .cancelled: return "Cancelled"
         }
     }
+    
+    /// Formatted trip summary for CarPlay list items
+    var carPlaySummary: String {
+        return "\(driverName) • \(formattedStartTimeForCarPlay) • \(statusDisplayTextForCarPlay)"
+    }
 }
 
 // MARK: - StopDetail Extensions for CarPlay
@@ -93,3 +99,5 @@ extension Double {
         return String(format: "%.2f€", self)
     }
 }
+
+
